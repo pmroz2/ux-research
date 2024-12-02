@@ -77,9 +77,12 @@
         );
     }
 
-    // Uruchom manipulację iframe natychmiast po załadowaniu skryptu
-    manipulateIframes();
+    // Dodaj nasłuchiwacz na DOMContentLoaded
+    document.addEventListener('DOMContentLoaded', function() {
+        // Uruchom manipulację iframe po załadowaniu DOM
+        manipulateIframes();
 
-    // Uruchom nasłuchiwacza na kliknięcia
-    setupClickListener();
+        // Uruchom nasłuchiwacza na kliknięcia
+        setupClickListener();
+    });
 })();
