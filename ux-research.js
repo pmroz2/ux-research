@@ -59,7 +59,7 @@
                     // Wyślij wiadomość do iframe
                     iframe.contentWindow.postMessage(
                         { typ: 'klikniecie', dane: 'task-completed' }, // Przesyłane dane
-                        'https://bmm5c9.axshare.com' // Dokładny adres iframe
+                        'https://form.ux-research.eu' // Dokładny adres iframe
                     );
                 } else {
                     console.log('Kliknięto element inny niż task-completed:', event.target);
