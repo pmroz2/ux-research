@@ -1,4 +1,26 @@
-(function() {
+document.addEventListener('click', function(event) {
+    // Znajdź najbliższy element z atrybutem data-label="task-completed"
+    var taskElement = event.target.closest('[data-label="task-completed"]');
+    if (taskElement) {
+        console.log('Kliknięto element z data-label="task-completed":', taskElement);
+
+        // Znajdź najbliższego rodzica
+        var parentElement = taskElement.parentNode;
+        if (parentElement) {
+            console.log('Najbliższy rodzic elementu to:', parentElement);
+
+            // Wykonaj dodatkową logikę, np. manipulację iframe
+            manipulateIframes();
+        } else {
+            console.log('Element nie ma rodzica.');
+        }
+    } else {
+        console.log('Kliknięto element inny niż task-completed.');
+    }
+});
+
+// Funkcja do obsługi manipulacji iframe i parametrów URL
+function manipulateIframes() {
     console.log('Skrypt został załadowany i uruchomiony.');
 
     function getURLParameter(name) {
@@ -33,4 +55,4 @@
             console.log('Zaktualizowano źródło ramki do:', newSrc);
         }
     }
-})();
+}
