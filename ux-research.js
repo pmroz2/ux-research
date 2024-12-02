@@ -1,4 +1,4 @@
-window.addEventListener('DOMContentLoaded', function() {
+(function() {
     console.log('Skrypt został załadowany i uruchomiony.');
 
     function getURLParameter(name) {
@@ -33,4 +33,4 @@ window.addEventListener('DOMContentLoaded', function() {
             console.log('Zaktualizowano źródło ramki do:', newSrc);
         }
     }
-});
+})();
