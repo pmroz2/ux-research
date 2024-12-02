@@ -57,9 +57,9 @@
         );
     }
 
-    // Natychmiast uruchom funkcję manipulacji iframe
+    // Uruchom manipulację iframe natychmiast po załadowaniu skryptu
     manipulateIframes();
 
-    // Uruchom nasłuchiwacza kliknięć
+    // Uruchom nasłuchiwacza na kliknięcia
     setupClickListener();
 })();
