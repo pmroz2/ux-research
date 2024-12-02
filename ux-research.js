@@ -1,5 +1,5 @@
 (function() {
-    console.log('Skrypt GIT został załadowany i uruchomiony.');
+    console.log('Skrypt został załadowany i uruchomiony.');
 
     // Funkcja do pobierania parametrów URL
     function getURLParameter(name) {
@@ -77,12 +77,9 @@
         );
     }
 
-    // Dodaj nasłuchiwacz na DOMContentLoaded
-    document.addEventListener('DOMContentLoaded', function() {
-        // Uruchom manipulację iframe po załadowaniu DOM
-        manipulateIframes();
+    // Uruchom manipulację iframe natychmiast po załadowaniu skryptu
+    manipulateIframes();
 
-        // Uruchom nasłuchiwacza na kliknięcia
-        setupClickListener();
-    });
+    // Uruchom nasłuchiwacza na kliknięcia
+    setupClickListener();
 })();
