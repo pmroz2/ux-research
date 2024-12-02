@@ -1,4 +1,4 @@
-console.log('Skrypt został załadowany z Github yee3.');
+console.log('Skrypt został załadowany z Github.');
 
 document.addEventListener('click', function(event) {
     var taskElement = event.target.closest('[data-label="task-completed"]');
