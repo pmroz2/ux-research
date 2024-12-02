@@ -30,24 +30,19 @@
             return;
         }
 
-        const iframes = document.querySelectorAll('iframe');
+        // Selektuj iframe z atrybutem data-label="tally-iframe"
+        const iframe = document.querySelector('iframe[data-label="tally-iframe"]');
 
-        for (let iframe of iframes) {
-            const iframeSrc = iframe.getAttribute('src');
-            if (iframeSrc && iframeSrc.includes('https://nieruszactegolinku123.com')) {
-                console.log('Znaleziono ramkę o żądanym źródle:', iframe);
-                const newSrc = survey + (survey.includes('?') ? '&' : '?') + 'user_id=' + encodeURIComponent(trans_id);
-                iframe.setAttribute('src', newSrc);
-                console.log('Zaktualizowano źródło ramki do:', newSrc);
+        if (iframe) {
+            console.log('Znaleziono ramkę z data-label="tally-iframe":', iframe);
+            const newSrc = survey + (survey.includes('?') ? '&' : '?') + 'user_id=' + encodeURIComponent(trans_id);
+            iframe.setAttribute('src', newSrc);
+            console.log('Zaktualizowano źródło ramki do:', newSrc);
 
-                // Przechowaj referencję do tego iframe
-                targetIframe = iframe;
-                break; // Jeśli chcesz manipulować tylko pierwszym znalezionym iframe
-            }
-        }
-
-        if (!targetIframe) {
-            console.log('Nie znaleziono iframe do manipulacji.');
+            // Przechowaj referencję do tego iframe
+            targetIframe = iframe;
+        } else {
+            console.log('Nie znaleziono iframe z data-label="tally-iframe".');
         }
     }
 
