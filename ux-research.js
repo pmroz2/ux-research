@@ -45,7 +45,7 @@
         console.log('Nasłuchiwanie na kliknięcia...');
     
         // Wybierz iframe (załóżmy, że ma ID "mojeIframe")
-        const iframe = document.getElementById('mojeIframe');
+        const iframe = document.getElementById('u576_input');
     
         // Dodaj nasłuchiwacz na kliknięcia
         document.addEventListener(
