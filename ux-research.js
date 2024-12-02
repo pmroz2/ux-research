@@ -1,4 +1,3 @@
-// IIFE do załadowania skryptu i manipulacji iframe
 (function() {
     console.log('Skrypt został załadowany i uruchomiony.');
 
@@ -12,6 +11,8 @@
 
     // Funkcja do manipulacji iframe
     function manipulateIframes() {
+        console.log('Rozpoczynam manipulację iframe.');
+
         const trans_id = getURLParameter('trans_id');
         const survey = getURLParameter('survey');
 
@@ -48,15 +49,17 @@
                 var taskElement = event.target.closest('[data-label="task-completed"]');
                 if (taskElement) {
                     console.log('Kliknięto element z data-label="task-completed":', taskElement);
-                    manipulateIframes(); // Wywołaj manipulację iframe po kliknięciu
                 } else {
-                    console.log('Kliknięto inny element:', event.target);
+                    console.log('Kliknięto element inny niż task-completed:', event.target);
                 }
             },
             { passive: false }
         );
     }
 
-    // Uruchom nasłuchiwacza
+    // Natychmiast uruchom funkcję manipulacji iframe
+    manipulateIframes();
+
+    // Uruchom nasłuchiwacza kliknięć
     setupClickListener();
 })();
