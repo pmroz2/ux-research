@@ -1,6 +1,8 @@
+// IIFE do załadowania skryptu i manipulacji iframe
 (function() {
     console.log('Skrypt został załadowany i uruchomiony.');
 
+    // Funkcja do pobierania parametrów URL
     function getURLParameter(name) {
         name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
         const regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
@@ -8,43 +10,53 @@
         return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
     }
 
-    const trans_id = getURLParameter('trans_id');
-    const survey = getURLParameter('survey');
+    // Funkcja do manipulacji iframe
+    function manipulateIframes() {
+        const trans_id = getURLParameter('trans_id');
+        const survey = getURLParameter('survey');
 
-    if (trans_id) {
-        console.log('Znaleziono parametr trans_id:', trans_id);
-    } else {
-        console.log('Nie znaleziono parametru trans_id.');
-    }
+        if (trans_id) {
+            console.log('Znaleziono parametr trans_id:', trans_id);
+        } else {
+            console.log('Nie znaleziono parametru trans_id.');
+        }
 
-    if (!survey) {
-        console.log('Nie znaleziono parametru survey.');
-        return;
-    }
+        if (!survey) {
+            console.log('Nie znaleziono parametru survey.');
+            return;
+        }
 
-    const iframes = document.querySelectorAll('iframe');
+        const iframes = document.querySelectorAll('iframe');
 
-    for (let iframe of iframes) {
-        const iframeSrc = iframe.getAttribute('src');
-        if (iframeSrc && iframeSrc.includes('https://nieruszactegolinku123.com')) {
-            console.log('Znaleziono ramkę o żądanym źródle:', iframe);
-            const newSrc = survey + (survey.includes('?') ? '&' : '?') + 'user_id=' + encodeURIComponent(trans_id);
-            iframe.setAttribute('src', newSrc);
-            console.log('Zaktualizowano źródło ramki do:', newSrc);
+        for (let iframe of iframes) {
+            const iframeSrc = iframe.getAttribute('src');
+            if (iframeSrc && iframeSrc.includes('https://nieruszactegolinku123.com')) {
+                console.log('Znaleziono ramkę o żądanym źródle:', iframe);
+                const newSrc = survey + (survey.includes('?') ? '&' : '?') + 'user_id=' + encodeURIComponent(trans_id);
+                iframe.setAttribute('src', newSrc);
+                console.log('Zaktualizowano źródło ramki do:', newSrc);
+            }
         }
     }
-})();
 
-
-console.log('Skrypt został załadowany z Amazon S3.');
-
-document.addEventListener('click', function(event) {
-    var taskElement = event.target.closest('[data-label="task-completed"]');
-    if (taskElement) {
-        console.log('Kliknięto element z data-label="task-completed":', taskElement);
-    } else {
-        console.log('Kliknięto inny element:', event.target);
+    // Funkcja do nasłuchiwania kliknięć
+    function setupClickListener() {
+        console.log('Nasłuchiwanie na kliknięcia...');
+        document.addEventListener(
+            'click',
+            function(event) {
+                var taskElement = event.target.closest('[data-label="task-completed"]');
+                if (taskElement) {
+                    console.log('Kliknięto element z data-label="task-completed":', taskElement);
+                    manipulateIframes(); // Wywołaj manipulację iframe po kliknięciu
+                } else {
+                    console.log('Kliknięto inny element:', event.target);
+                }
+            },
+            { passive: false }
+        );
     }
-}, { passive: false });
 
-
+    // Uruchom nasłuchiwacza
+    setupClickListener();
+})();
