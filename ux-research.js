@@ -1,4 +1,4 @@
-console.log('Skrypt został załadowany z Github yee.');
+console.log('Skrypt został załadowany z Github yee2.');
 
 document.addEventListener('click', function(event) {
     var taskElement = event.target.closest('[data-label="task-completed"]');
