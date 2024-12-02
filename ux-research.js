@@ -43,12 +43,24 @@
     // Funkcja do nasłuchiwania kliknięć
     function setupClickListener() {
         console.log('Nasłuchiwanie na kliknięcia...');
+    
+        // Wybierz iframe (załóżmy, że ma ID "mojeIframe")
+        const iframe = document.getElementById('mojeIframe');
+    
+        // Dodaj nasłuchiwacz na kliknięcia
         document.addEventListener(
             'click',
             function(event) {
                 var taskElement = event.target.closest('[data-label="task-completed"]');
+                
                 if (taskElement) {
                     console.log('Kliknięto element z data-label="task-completed":', taskElement);
+    
+                    // Wyślij wiadomość do iframe
+                    iframe.contentWindow.postMessage(
+                        { typ: 'klikniecie', dane: 'task-completed' }, // Przesyłane dane
+                        'https://b12d9.axshare.com' // Dokładny adres iframe
+                    );
                 } else {
                     console.log('Kliknięto element inny niż task-completed:', event.target);
                 }
@@ -56,6 +68,7 @@
             { passive: false }
         );
     }
+
 
     // Uruchom manipulację iframe natychmiast po załadowaniu skryptu
     manipulateIframes();
