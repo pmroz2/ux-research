@@ -1,5 +1,5 @@
 (function() {
-    console.log('Skrypt został załadowany i uruchomiony.');
+    console.log('Skrypt GIT został załadowany i uruchomiony.');
 
     // Funkcja do pobierania parametrów URL
     function getURLParameter(name) {
