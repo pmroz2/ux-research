@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Ładowanie skryptu</title>
+    <script>
+        (function() {
+            // Pobierz parametr 'target' z URL
+            var target = new URLSearchParams(window.location.search).get('target');
+            if (target) {
+                console.log('Cel: ', target);
+                
+                // Wstrzykujemy skrypt z GitHub Pages
+                var scriptId = 'github-pages-script';
+                if (!document.getElementById(scriptId)) {
+                    var script = document.createElement('script');
+                    script.id = scriptId;
+                    script.src = 'https://pmroz2.github.io/ux-research/ux-research.js'; // Adres Twojego skryptu
+                    script.onload = function() {
+                        console.log('Skrypt został załadowany.');
+                        // Przekierowanie do prototypu Axure po załadowaniu skryptu
+                        window.location.href = target;
+                    };
+                    script.onerror = function() {
+                        console.error('Błąd ładowania skryptu.');
+                    };
+                    document.head.appendChild(script);
+                }
+            } else {
+                console.error('Nie podano parametru "target".');
+                document.body.innerHTML = '<h1>Błąd: Brak parametru target w URL!</h1>';
+            }
+        })();
+    </script>
+</head>
+<body>
+    <p>Ładowanie skryptu, proszę czekać...</p>
+</body>
+</html>
