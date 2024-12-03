@@ -179,8 +179,117 @@
         console.log('Struktury HTML zostały dodane do dokumentu.');
     })();
 
+    // ------------------------------------------------------------------------
+    // 3. Funkcja do dodawania nasłuchiwaczy i logiki zależnej od struktur
+    // ------------------------------------------------------------------------
+    (function setupAdditionalEventListeners() {
+        // Pobieranie elementów
+        const startButton = document.getElementById('start-button');
+        const topOverlay = document.getElementById('top-overlay');
+        const iframeArrow = document.getElementById('iframe-arrow');
+        const iframeArrowImg = iframeArrow ? iframeArrow.querySelector('img') : null;
+        const iframeContainer = document.getElementById('iframe-container');
+        const backgroundOverlayStart = document.getElementById('background-overlay-start');
+        const backgroundOverlayFeedback = document.getElementById('background-overlay-feedback');
+
+        // Sprawdzenie, czy wszystkie elementy zostały poprawnie znalezione
+        if (!startButton || !topOverlay || !iframeArrow || !iframeArrowImg || !iframeContainer || !backgroundOverlayStart || !backgroundOverlayFeedback) {
+            console.warn('Niektóre elementy wymagane do nasłuchiwaczy nie zostały znalezione.');
+            return;
+        }
+
+        // Funkcja uruchamiająca animację shake
+        function triggerShake() {
+            startButton.classList.add('shake');
+            setTimeout(() => {
+                startButton.classList.remove('shake');
+            }, 500);
+        }
+
+        // Funkcja do ukrywania iframe-arrow z animacją fade
+        function hideIframeArrow() {
+            iframeArrow.classList.add('hidden-fade');
+        }
+
+        // Funkcja do pokazywania iframe-arrow z animacją fade
+        function showIframeArrow() {
+            iframeArrow.classList.remove('hidden-fade');
+        }
+
+        // Ukrycie top-overlay po kliknięciu w button i ukrycie background-overlay-start
+        startButton.addEventListener('click', () => {
+            topOverlay.style.display = 'none';
+            backgroundOverlayStart.setAttribute('hidden', 'true');
+            console.log('Top overlay i background-overlay-start zostały ukryte.');
+        });
+
+        // Obsługa kliknięcia na iframe-arrow
+        iframeArrow.addEventListener('click', () => {
+            const isVisible = iframeContainer.getAttribute('data-visible') === 'true';
+
+            if (isVisible) {
+                iframeContainer.classList.add('hidden');
+                iframeArrowImg.classList.add('rotated');
+                iframeContainer.setAttribute('data-visible', 'false');
+                console.log('Iframe container został ukryty.');
+            } else {
+                iframeContainer.classList.remove('hidden');
+                iframeArrowImg.classList.remove('rotated');
+                iframeContainer.setAttribute('data-visible', 'true');
+                console.log('Iframe container został pokazany.');
+            }
+        });
+
+        // Nasłuch kliknięcia na top-overlay
+        topOverlay.addEventListener('click', (event) => {
+            if (!event.target.closest('#start-button')) {
+                triggerShake();
+                console.log('Kliknięto poza start-button, wywołano animację shake.');
+            }
+        });
+
+        // Funkcja obsługująca zmiany atrybutu hidden na background-overlay-feedback
+        function handleBackgroundOverlayFeedbackChange(mutationsList) {
+            for (const mutation of mutationsList) {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'hidden') {
+                    const isHidden = backgroundOverlayFeedback.hasAttribute('hidden');
+
+                    if (!isHidden) {
+                        // background-overlay-feedback stało się widoczne
+                        hideIframeArrow();
+                        console.log('background-overlay-feedback stało się widoczne, ukryto iframe-arrow.');
+
+                        // Sprawdzenie, czy iframe-container jest schowany
+                        const isIframeHidden = iframeContainer.classList.contains('hidden') || iframeContainer.getAttribute('data-visible') === 'false';
+
+                        if (isIframeHidden) {
+                            // Wyzwalanie kliknięcia na iframe-arrow, aby pokazać iframe-container
+                            // Używamy setTimeout, aby upewnić się, że fade-out animacja się wykona
+                            setTimeout(() => {
+                                iframeArrow.click();
+                                console.log('Wywołano kliknięcie na iframe-arrow, aby pokazać iframe-container.');
+                            }, 200); // Czas trwania fade-out w CSS
+                        }
+                    } else {
+                        // background-overlay-feedback zostało ukryte
+                        showIframeArrow();
+                        console.log('background-overlay-feedback zostało ukryte, pokazano iframe-arrow.');
+                    }
+                }
+            }
+        }
+
+        // Inicjalizacja MutationObserver
+        const observer = new MutationObserver(handleBackgroundOverlayFeedbackChange);
+
+        // Konfiguracja obserwatora do monitorowania atrybutów
+        observer.observe(backgroundOverlayFeedback, { attributes: true });
+
+        console.log('Dodatkowe nasłuchiwacze i logika zostały skonfigurowane.');
+    })();
+
     // ----------------------------------------
-    // 3. Oryginalny skrypt po nowych funkcjach
+    // 4. Oryginalny skrypt po nowych funkcjach
     // ----------------------------------------
 
     // Funkcja do pobierania parametrów URL
