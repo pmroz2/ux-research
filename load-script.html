@@ -8,7 +8,7 @@
             // Pobierz parametr 'target' z URL
             var target = new URLSearchParams(window.location.search).get('target');
             if (target) {
-                console.log('Cel: ', target);
+                console.log('Cel (target):', target);
                 
                 // Wstrzykujemy skrypt z GitHub Pages
                 var scriptId = 'github-pages-script';
@@ -18,8 +18,11 @@
                     script.src = 'https://pmroz2.github.io/ux-research/ux-research.js'; // Adres Twojego skryptu
                     script.onload = function() {
                         console.log('Skrypt został załadowany.');
-                        // Przekierowanie do prototypu Axure po załadowaniu skryptu
-                        window.location.href = target;
+                        // Opóźnienie przed przekierowaniem (np. 3 sekundy)
+                        setTimeout(function() {
+                            console.log('Przekierowanie do:', target);
+                            window.location.href = target;
+                        }, 3000); // 3000 ms = 3 sekundy
                     };
                     script.onerror = function() {
                         console.error('Błąd ładowania skryptu.');
