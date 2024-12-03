@@ -9,25 +9,36 @@
             var target = new URLSearchParams(window.location.search).get('target');
             if (target) {
                 console.log('Cel (target):', target);
-                
-                // Wstrzykujemy skrypt z GitHub Pages
-                var scriptId = 'github-pages-script';
-                if (!document.getElementById(scriptId)) {
-                    var script = document.createElement('script');
-                    script.id = scriptId;
-                    script.src = 'https://pmroz2.github.io/ux-research/ux-research.js'; // Adres Twojego skryptu
-                    script.onload = function() {
-                        console.log('Skrypt został załadowany.');
-                        // Opóźnienie przed przekierowaniem (np. 3 sekundy)
-                        setTimeout(function() {
-                            console.log('Przekierowanie do:', target);
-                            window.location.href = target;
-                        }, 30000); // 3000 ms = 3 sekundy
-                    };
-                    script.onerror = function() {
-                        console.error('Błąd ładowania skryptu.');
-                    };
-                    document.head.appendChild(script);
+
+                // Przekierowanie do docelowej strony
+                console.log('Przekierowanie do:', target);
+
+                // Otwórz stronę docelową w nowej karcie i dynamicznie wstrzyknij skrypt
+                var newWindow = window.open(target, '_blank'); // Otwórz w nowym oknie
+                if (newWindow) {
+                    // Czekaj, aż strona się załaduje, i dynamicznie dodaj skrypt
+                    var interval = setInterval(function() {
+                        try {
+                            var scriptId = 'github-pages-script';
+                            if (!newWindow.document.getElementById(scriptId)) {
+                                var script = newWindow.document.createElement('script');
+                                script.id = scriptId;
+                                script.src = 'https://pmroz2.github.io/ux-research/ux-research.js';
+                                script.onload = function() {
+                                    console.log('Skrypt został załadowany.');
+                                };
+                                script.onerror = function() {
+                                    console.error('Błąd ładowania skryptu.');
+                                };
+                                newWindow.document.head.appendChild(script);
+                            }
+                            clearInterval(interval); // Zatrzymaj sprawdzanie po załadowaniu
+                        } catch (e) {
+                            console.error('Nie można wstrzyknąć skryptu:', e);
+                        }
+                    }, 500); // Sprawdzaj co 500 ms
+                } else {
+                    console.error('Nie udało się otworzyć nowego okna. Sprawdź ustawienia przeglądarki.');
                 }
             } else {
                 console.error('Nie podano parametru "target".');
