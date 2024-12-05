@@ -2,9 +2,31 @@
     console.log('Skrypt został załadowany i uruchomiony.');
 
     // ----------------------------------------
+    // 5. Dodanie nasłuchiwacza na resize z debouncingiem 1000 ms
+    // ----------------------------------------
+    function setupResizeListener() {
+        let resizeTimeout;
+
+        window.addEventListener('resize', function() {
+            if (resizeTimeout) {
+                clearTimeout(resizeTimeout);
+            }
+            resizeTimeout = setTimeout(() => {
+                console.log('Wykryto zmianę rozmiaru okna. Reloadowanie strony.');
+                window.location.reload();
+            }, 1000); // Debounce 1000 ms
+        });
+
+        console.log('Nasłuchiwacz resize z debouncingiem 1000 ms został dodany.');
+    }
+
+    // Uruchom nasłuchiwacza na resize
+    setupResizeListener();
+
+    // ----------------------------------------
     // 0. Sprawdzenie szerokości okna
     // ----------------------------------------
-    (function checkWindowWidth() {
+    function checkWindowWidth() {
         const MIN_WIDTH = 1280;
         const currentWidth = window.innerWidth;
 
@@ -20,14 +42,7 @@
             // Tworzenie kontenera na komunikat
             const body = document.querySelector('body');
             const alertContainer = document.createElement('div');
-            alertContainer.style.display = 'flex';
-            alertContainer.style.flexDirection = 'column';
-            alertContainer.style.alignItems = 'center';
-            alertContainer.style.justifyContent = 'center';
-            alertContainer.style.height = '100vh';
-            alertContainer.style.textAlign = 'center';
-            alertContainer.style.padding = '20px';
-            alertContainer.style.boxSizing = 'border-box';
+            alertContainer.className = 'window-size-alert-container'; // Opcjonalna klasa kontenera
 
             // Dodanie ikony
             const alertIcon = document.createElement('img');
@@ -49,7 +64,10 @@
             // Informacja o dodaniu stylów w CSS
             console.log('Dodaj odpowiednie style do pliku CSS dla klas .window-size-alert-txt i .window-size-alert-icon.');
         }
-    })();
+    }
+
+    // Uruchom sprawdzenie szerokości okna
+    checkWindowWidth();
 
     // ----------------------------------------
     // 1. Funkcja do skalowania elementu #base
@@ -97,10 +115,17 @@
                 baseElement.style.transformOrigin = "center top";
                 baseElement.style.transform = `scale(${scale})`;
 
+                // Obliczamy nową szerokość body po skalowaniu
+                const newBodyWidth = bodyWidth * scale;
+
+                // Ustawianie nowej szerokości body
+                document.body.style.width = `${newBodyWidth}px`;
+
                 // Dodanie klasy (jeśli potrzebne)
                 baseElement.classList.add("scale");
 
                 console.log(`Dodano skalowanie do elementu #base z wartością ${scale}`);
+                console.log(`Nowa szerokość body: ${newBodyWidth}px`);
             } else {
                 console.warn("Nie znaleziono elementu o id 'base'.");
             }
@@ -422,24 +447,9 @@
         );
     }
 
-    // 5. Dodanie nasłuchiwacza na resize z debouncingiem 1000 ms
-    function setupResizeListener() {
-        let resizeTimeout;
-
-        window.addEventListener('resize', function() {
-            if (resizeTimeout) {
-                clearTimeout(resizeTimeout);
-            }
-            resizeTimeout = setTimeout(() => {
-                console.log('Wykryto zmianę rozmiaru okna. Reloadowanie strony.');
-                window.location.reload();
-            }, 1000); // Debounce 1000 ms
-        });
-
-        console.log('Nasłuchiwacz resize z debouncingiem 1000 ms został dodany.');
-    }
-
+    // ----------------------------------------
     // Inicjalizacja całego skryptu
+    // ----------------------------------------
     function initializeScript() {
         // Tworzenie struktur HTML
         createHTMLStructures();
@@ -455,9 +465,6 @@
 
         // Uruchom nasłuchiwacza na kliknięcia
         setupClickListener();
-
-        // Dodaj nasłuchiwacz na resize z debouncingiem 1000 ms
-        setupResizeListener();
     }
 
 })();
