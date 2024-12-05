@@ -129,6 +129,7 @@
 
         const iframe = document.createElement('iframe');
         iframe.className = 'iframe';
+        iframe.id = 'survey-iframe'; // 1. Dodano id "survey-iframe"
 
         const iframeArrow = document.createElement('div');
         iframeArrow.id = 'iframe-arrow';
@@ -307,13 +308,13 @@
     function manipulateIframes() {
         console.log('Rozpoczynam manipulację iframe.');
 
-        const trans_id = getURLParameter('trans_id');
+        const id = getURLParameter('id'); // 3. Zmieniono 'trans_id' na 'id'
         const survey = getURLParameter('survey');
 
-        if (trans_id) {
-            console.log('Znaleziono parametr trans_id:', trans_id);
+        if (id) { // 3. Zmieniono 'trans_id' na 'id'
+            console.log('Znaleziono parametr id:', id); // 3. Zmieniono 'trans_id' na 'id'
         } else {
-            console.log('Nie znaleziono parametru trans_id.');
+            console.log('Nie znaleziono parametru id.'); // 3. Zmieniono 'trans_id' na 'id'
         }
 
         if (!survey) {
@@ -321,19 +322,19 @@
             return;
         }
 
-        // Selektuj iframe z atrybutem data-label="tally-iframe"
-        const iframe = document.querySelector('iframe[data-label="tally-iframe"]');
+        // 2. Zmieniono selektor iframe na id "survey-iframe"
+        const iframe = document.getElementById('survey-iframe');
 
         if (iframe) {
-            console.log('Znaleziono ramkę z data-label="tally-iframe":', iframe);
-            const newSrc = survey + (survey.includes('?') ? '&' : '?') + 'user_id=' + encodeURIComponent(trans_id);
+            console.log('Znaleziono ramkę z id="survey-iframe":', iframe);
+            const newSrc = survey + (survey.includes('?') ? '&' : '?') + 'user_id=' + encodeURIComponent(id); // 3. Używamy 'id' zamiast 'trans_id'
             iframe.setAttribute('src', newSrc);
             console.log('Zaktualizowano źródło ramki do:', newSrc);
 
             // Przechowaj referencję do tego iframe
             targetIframe = iframe;
         } else {
-            console.log('Nie znaleziono iframe z data-label="tally-iframe".');
+            console.log('Nie znaleziono iframe z id="survey-iframe".');
         }
     }
 
@@ -351,6 +352,15 @@
                     console.log('Kliknięto element z data-label="task-completed":', taskElement);
 
                     if (targetIframe && targetIframe.contentWindow) {
+                        // 4. Dodatkowa logika - usunięcie atrybutu 'hidden' z 'background-overlay-feedback'
+                        const backgroundOverlayFeedback = document.getElementById('background-overlay-feedback');
+                        if (backgroundOverlayFeedback) {
+                            backgroundOverlayFeedback.removeAttribute('hidden');
+                            console.log('Usunięto atrybut "hidden" z elementu #background-overlay-feedback.');
+                        } else {
+                            console.warn('Nie znaleziono elementu #background-overlay-feedback.');
+                        }
+
                         // Wyślij wiadomość do iframe
                         targetIframe.contentWindow.postMessage(
                             { typ: 'klikniecie', dane: 'task-completed' }, // Przesyłane dane
@@ -367,6 +377,23 @@
             { passive: false }
         );
     }
+
+    // 5. Dodanie nasłuchiwacza na resize z debouncingiem 1000 ms
+    (function setupResizeListener() {
+        let resizeTimeout;
+
+        window.addEventListener('resize', function() {
+            if (resizeTimeout) {
+                clearTimeout(resizeTimeout);
+            }
+            resizeTimeout = setTimeout(() => {
+                console.log('Wykryto zmianę rozmiaru okna. Reloadowanie strony.');
+                window.location.reload();
+            }, 1000); // Debounce 1000 ms
+        });
+
+        console.log('Nasłuchiwacz resize z debouncingiem 1000 ms został dodany.');
+    })();
 
     // Uruchom manipulację iframe natychmiast po załadowaniu skryptu
     manipulateIframes();
