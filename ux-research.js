@@ -2,6 +2,11 @@
     console.log('Skrypt został załadowany i uruchomiony.');
 
     // ----------------------------------------
+    // Zmienna do przechowywania referencji do manipulowanego iframe
+    // ----------------------------------------
+    let targetIframe = null;
+
+    // ----------------------------------------
     // 5. Dodanie nasłuchiwacza na resize z debouncingiem 1000 ms
     // ----------------------------------------
     function setupResizeListener() {
@@ -369,9 +374,6 @@
         const results = regex.exec(location.search);
         return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
     }
-
-    // Zmienna do przechowywania referencji do manipulowanego iframe
-    let targetIframe = null;
 
     // Funkcja do manipulacji iframe
     function manipulateIframes() {
