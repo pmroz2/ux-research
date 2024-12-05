@@ -18,8 +18,8 @@ html, body {
     z-index: 1000;
     opacity: 1;
     transition: opacity 200ms ease; /* Animacja fade */
-    backdrop-filter: blur(10px); /* Efekt rozmycia */
-    -webkit-backdrop-filter: blur(10px); /* Dla wsparcia WebKit */
+    backdrop-filter: blur(5px); /* Efekt rozmycia */
+    -webkit-backdrop-filter: blur(5px); /* Dla wsparcia WebKit */
 
 }
 
