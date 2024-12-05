@@ -46,6 +46,7 @@ html, body {
     height: 100%;
     border: none;
     display: block;
+    opacity: 30%;
 }
 
 .iframe-arrow {
