@@ -46,27 +46,10 @@
             // Dodanie kontenera do body
             body.appendChild(alertContainer);
 
-            // Dodanie stylów do klasy .window-size-alert-txt i .window-size-alert-icon
-            const styleTag = document.createElement('style');
-            styleTag.innerHTML = `
-                .window-size-alert-txt {
-                    font-size: 1.2em;
-                    color: #333;
-                    margin-top: 20px;
-                }
-                .window-size-alert-icon {
-                    width: 100px;
-                    height: 100px;
-                }
-                body {
-                    margin: 0;
-                    padding: 0;
-                    box-sizing: border-box;
-                    background-color: #f9f9f9;
-                }
-            `;
-            document.head.appendChild(styleTag);
-        })();
+            // Informacja o dodaniu stylów w CSS
+            console.log('Dodaj odpowiednie style do pliku CSS dla klas .window-size-alert-txt i .window-size-alert-icon.');
+        }
+    })();
 
     // ----------------------------------------
     // 1. Funkcja do skalowania elementu #base
@@ -114,23 +97,10 @@
                 baseElement.style.transformOrigin = "center top";
                 baseElement.style.transform = `scale(${scale})`;
 
-                // Obliczamy nową szerokość body po skalowaniu
-                const newBodyWidth = bodyWidth * scale;
-
-                // Dodajemy styl wymuszający nową szerokość body
-                const styleTag = document.createElement("style");
-                styleTag.innerHTML = `
-                    body {
-                        width: ${newBodyWidth}px !important;
-                    }
-                `;
-                document.head.appendChild(styleTag);
-
                 // Dodanie klasy (jeśli potrzebne)
                 baseElement.classList.add("scale");
 
                 console.log(`Dodano skalowanie do elementu #base z wartością ${scale}`);
-                console.log(`Nowa szerokość body: ${newBodyWidth}px`);
             } else {
                 console.warn("Nie znaleziono elementu o id 'base'.");
             }
