@@ -41,8 +41,8 @@
             initializeScript();
         } else {
             console.log(`Szerokość okna (${currentWidth}px) jest mniejsza niż ${MIN_WIDTH}px. Wyświetlam komunikat ostrzegawczy.`);
-            // Usuwanie zawartości DOM poza body
-            document.documentElement.innerHTML = '<body></body>';
+            // Usuwanie zawartości DOM tylko z body
+            document.body.innerHTML = '';
 
             // Tworzenie kontenera na komunikat
             const body = document.querySelector('body');
