@@ -2,9 +2,76 @@
     console.log('Skrypt został załadowany i uruchomiony.');
 
     // ----------------------------------------
+    // 0. Sprawdzenie szerokości okna
+    // ----------------------------------------
+    (function checkWindowWidth() {
+        const MIN_WIDTH = 1280;
+        const currentWidth = window.innerWidth;
+
+        if (currentWidth >= MIN_WIDTH) {
+            console.log(`Szerokość okna (${currentWidth}px) jest większa lub równa ${MIN_WIDTH}px. Kontynuuję działanie skryptu.`);
+            // Kontynuuj z istniejącą logiką skryptu
+            initializeScript();
+        } else {
+            console.log(`Szerokość okna (${currentWidth}px) jest mniejsza niż ${MIN_WIDTH}px. Wyświetlam komunikat ostrzegawczy.`);
+            // Usuwanie zawartości DOM poza body
+            document.documentElement.innerHTML = '<body></body>';
+
+            // Tworzenie kontenera na komunikat
+            const body = document.querySelector('body');
+            const alertContainer = document.createElement('div');
+            alertContainer.style.display = 'flex';
+            alertContainer.style.flexDirection = 'column';
+            alertContainer.style.alignItems = 'center';
+            alertContainer.style.justifyContent = 'center';
+            alertContainer.style.height = '100vh';
+            alertContainer.style.textAlign = 'center';
+            alertContainer.style.padding = '20px';
+            alertContainer.style.boxSizing = 'border-box';
+
+            // Dodanie ikony
+            const alertIcon = document.createElement('img');
+            alertIcon.src = 'https://1236554drs4231112876vccf4-pawel.s3.eu-north-1.amazonaws.com/ux-research_window-size-alert-icon.svg';
+            alertIcon.alt = 'Alert Icon';
+            alertIcon.className = 'window-size-alert-icon';
+            alertContainer.appendChild(alertIcon);
+
+            // Dodanie komunikatu tekstowego
+            const alertText = document.createElement('p');
+            const difference = MIN_WIDTH - currentWidth;
+            alertText.textContent = `Rozdzielczość okna musi wynosić minimum 1280 px na szerokość. Zmień urządzenie na większe lub rozszerz to okno o ${difference}px.`;
+            alertText.className = 'window-size-alert-txt';
+            alertContainer.appendChild(alertText);
+
+            // Dodanie kontenera do body
+            body.appendChild(alertContainer);
+
+            // Dodanie stylów do klasy .window-size-alert-txt i .window-size-alert-icon
+            const styleTag = document.createElement('style');
+            styleTag.innerHTML = `
+                .window-size-alert-txt {
+                    font-size: 1.2em;
+                    color: #333;
+                    margin-top: 20px;
+                }
+                .window-size-alert-icon {
+                    width: 100px;
+                    height: 100px;
+                }
+                body {
+                    margin: 0;
+                    padding: 0;
+                    box-sizing: border-box;
+                    background-color: #f9f9f9;
+                }
+            `;
+            document.head.appendChild(styleTag);
+        })();
+
+    // ----------------------------------------
     // 1. Funkcja do skalowania elementu #base
     // ----------------------------------------
-    (function scaleBaseElement() {
+    function scaleBaseElement() {
         let maxBottom = 0; // Największa dolna granica
         let lowestElement = null; // Element, który jest najniżej
 
@@ -70,12 +137,12 @@
         } else {
             console.log("Nie trzeba skalować strony, najniższy element mieści się w body.");
         }
-    })();
+    }
 
     // --------------------------------------------------
     // 2. Funkcja do tworzenia i dodawania struktur HTML
     // --------------------------------------------------
-    (function createHTMLStructures() {
+    function createHTMLStructures() {
         const body = document.querySelector('body');
 
         // background-overlay-start
@@ -178,12 +245,12 @@
         body.appendChild(topOverlay);
 
         console.log('Struktury HTML zostały dodane do dokumentu.');
-    })();
+    }
 
     // ------------------------------------------------------------------------
     // 3. Funkcja do dodawania nasłuchiwaczy i logiki zależnej od struktur
     // ------------------------------------------------------------------------
-    (function setupAdditionalEventListeners() {
+    function setupAdditionalEventListeners() {
         // Pobieranie elementów
         const startButton = document.getElementById('start-button');
         const topOverlay = document.getElementById('top-overlay');
@@ -222,6 +289,13 @@
             topOverlay.style.display = 'none';
             backgroundOverlayStart.setAttribute('hidden', 'true');
             console.log('Top overlay i background-overlay-start zostały ukryte.');
+
+            // 1. Zmiana opacity elementów z klasą .iframe na 100%
+            const iframes = document.querySelectorAll('.iframe');
+            iframes.forEach(iframe => {
+                iframe.style.opacity = '1'; // Ustawienie opacity na 100%
+                console.log(`Ustawiono opacity na 100% dla iframe:`, iframe);
+            });
         });
 
         // Obsługa kliknięcia na iframe-arrow
@@ -287,7 +361,7 @@
         observer.observe(backgroundOverlayFeedback, { attributes: true });
 
         console.log('Dodatkowe nasłuchiwacze i logika zostały skonfigurowane.');
-    })();
+    }
 
     // ----------------------------------------
     // 4. Oryginalny skrypt po nowych funkcjach
@@ -379,7 +453,7 @@
     }
 
     // 5. Dodanie nasłuchiwacza na resize z debouncingiem 1000 ms
-    (function setupResizeListener() {
+    function setupResizeListener() {
         let resizeTimeout;
 
         window.addEventListener('resize', function() {
@@ -393,12 +467,27 @@
         });
 
         console.log('Nasłuchiwacz resize z debouncingiem 1000 ms został dodany.');
-    })();
+    }
 
-    // Uruchom manipulację iframe natychmiast po załadowaniu skryptu
-    manipulateIframes();
+    // Inicjalizacja całego skryptu
+    function initializeScript() {
+        // Tworzenie struktur HTML
+        createHTMLStructures();
 
-    // Uruchom nasłuchiwacza na kliknięcia
-    setupClickListener();
+        // Skalowanie elementu #base
+        scaleBaseElement();
+
+        // Dodawanie nasłuchiwaczy i logiki zależnej od struktur
+        setupAdditionalEventListeners();
+
+        // Uruchom manipulację iframe natychmiast po załadowaniu skryptu
+        manipulateIframes();
+
+        // Uruchom nasłuchiwacza na kliknięcia
+        setupClickListener();
+
+        // Dodaj nasłuchiwacz na resize z debouncingiem 1000 ms
+        setupResizeListener();
+    }
 
 })();
