@@ -166,3 +166,15 @@ html, body {
 .shake {
     animation: shake 500ms ease-out;
 }
+
+.window-size-alert-txt {
+    font-size: 1.2em;
+    color: #333;
+    margin-top: 20px;
+}
+
+.window-size-alert-icon {
+    width: 100px;
+    height: 100px;
+}
+
