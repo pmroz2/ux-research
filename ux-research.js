@@ -296,6 +296,15 @@
                 iframe.style.opacity = '1'; // Ustawienie opacity na 100%
                 console.log(`Ustawiono opacity na 100% dla iframe:`, iframe);
             });
+
+            // 2. Wysłanie wiadomości do iframe o kliknięciu start-button
+            if (targetIframe && targetIframe.contentWindow) {
+                const message = { typ: 'startButtonClicked', dane: 'start-button' };
+                targetIframe.contentWindow.postMessage(message, 'https://form.ux-research.eu'); // Upewnij się, że adres jest poprawny
+                console.log('Wysłano wiadomość do iframe:', message);
+            } else {
+                console.warn('Nie znaleziono docelowego iframe lub iframe nie jest dostępny.');
+            }
         });
 
         // Obsługa kliknięcia na iframe-arrow
