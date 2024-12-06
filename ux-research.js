@@ -5,6 +5,7 @@
     // Zmienna do przechowywania referencji do manipulowanego iframe
     // ----------------------------------------
     let targetIframe = null;
+    let iframeOrigin = null; // Zmienna do przechowywania origin iframe
 
     // ----------------------------------------
     // 5. Dodanie nasłuchiwacza na resize z debouncingiem 1000 ms
@@ -196,7 +197,7 @@
 
         const iframe = document.createElement('iframe');
         iframe.className = 'iframe';
-        iframe.id = 'survey-iframe'; // 1. Dodano id "survey-iframe"
+        iframe.id = 'survey-iframe'; // Dodano id "survey-iframe"
 
         const iframeArrow = document.createElement('div');
         iframeArrow.id = 'iframe-arrow';
@@ -290,20 +291,13 @@
             backgroundOverlayStart.setAttribute('hidden', 'true');
             console.log('Top overlay i background-overlay-start zostały ukryte.');
 
-            // 1. Zmiana opacity elementów z klasą .iframe na 100%
-            const iframes = document.querySelectorAll('.iframe');
-            iframes.forEach(iframe => {
-                iframe.style.opacity = '1'; // Ustawienie opacity na 100%
-                console.log(`Ustawiono opacity na 100% dla iframe:`, iframe);
-            });
-
-            // 2. Wysłanie wiadomości do iframe o kliknięciu start-button
-            if (targetIframe && targetIframe.contentWindow) {
+            // 1. Wysłanie wiadomości do iframe o kliknięciu start-button
+            if (targetIframe && targetIframe.contentWindow && iframeOrigin) {
                 const message = { typ: 'startButtonClicked', dane: 'start-button' };
-                targetIframe.contentWindow.postMessage(message, 'https://form.ux-research.eu'); // Upewnij się, że adres jest poprawny
+                targetIframe.contentWindow.postMessage(message, iframeOrigin); // Użyj iframeOrigin
                 console.log('Wysłano wiadomość do iframe:', message);
             } else {
-                console.warn('Nie znaleziono docelowego iframe lub iframe nie jest dostępny.');
+                console.warn('Nie znaleziono docelowego iframe, iframeOrigin lub iframe nie jest dostępny.');
             }
         });
 
@@ -369,6 +363,41 @@
         // Konfiguracja obserwatora do monitorowania atrybutów
         observer.observe(backgroundOverlayFeedback, { attributes: true });
 
+        // ----------------------------------------
+        // 4. Dodanie nasłuchiwacza na wiadomości z iframe
+        // ----------------------------------------
+        function setupMessageListener() {
+            window.addEventListener('message', (event) => {
+                // Sprawdzenie, czy wiadomość pochodzi od zaufanego nadawcy
+                if (event.origin === iframeOrigin) { // Upewnij się, że adres jest poprawny
+                    console.log('Otrzymano wiadomość z dozwolonego źródła:', event.data);
+
+                    // Sprawdzenie typu akcji
+                    if (event.data.typ === 'nextButtonClicked') {
+                        console.log('Otrzymano akcję: next button');
+
+                        // Sprawdzenie, czy element #background-overlay-feedback ma atrybut 'hidden'
+                        const feedbackOverlay = document.getElementById('background-overlay-feedback');
+                        if (feedbackOverlay) {
+                            if (!feedbackOverlay.hasAttribute('hidden')) {
+                                feedbackOverlay.setAttribute('hidden', 'true');
+                                console.log('Dodano atrybut "hidden" do #background-overlay-feedback.');
+                            } else {
+                                console.log('#background-overlay-feedback już ma atrybut "hidden". Nie wykonano żadnych działań.');
+                            }
+                        } else {
+                            console.warn('Nie znaleziono elementu #background-overlay-feedback.');
+                        }
+                    }
+                } else {
+                    console.info('Nieautoryzowany nadawca:', event.origin);
+                }
+            });
+        }
+
+        // Uruchomienie nasłuchiwacza na wiadomości
+        setupMessageListener();
+
         console.log('Dodatkowe nasłuchiwacze i logika zostały skonfigurowane.');
     }
 
@@ -388,13 +417,13 @@
     function manipulateIframes() {
         console.log('Rozpoczynam manipulację iframe.');
 
-        const id = getURLParameter('id'); // 3. Zmieniono 'trans_id' na 'id'
+        const id = getURLParameter('id'); // Zmieniono 'trans_id' na 'id'
         const survey = getURLParameter('survey');
 
-        if (id) { // 3. Zmieniono 'trans_id' na 'id'
-            console.log('Znaleziono parametr id:', id); // 3. Zmieniono 'trans_id' na 'id'
+        if (id) { // Zmieniono 'trans_id' na 'id'
+            console.log('Znaleziono parametr id:', id);
         } else {
-            console.log('Nie znaleziono parametru id.'); // 3. Zmieniono 'trans_id' na 'id'
+            console.log('Nie znaleziono parametru id.');
         }
 
         if (!survey) {
@@ -402,17 +431,26 @@
             return;
         }
 
-        // 2. Zmieniono selektor iframe na id "survey-iframe"
+        // Zmieniono selektor iframe na id "survey-iframe"
         const iframe = document.getElementById('survey-iframe');
 
         if (iframe) {
             console.log('Znaleziono ramkę z id="survey-iframe":', iframe);
-            const newSrc = survey + (survey.includes('?') ? '&' : '?') + 'user_id=' + encodeURIComponent(id); // 3. Używamy 'id' zamiast 'trans_id'
+            const newSrc = survey + (survey.includes('?') ? '&' : '?') + 'user_id=' + encodeURIComponent(id); // Używamy 'id' zamiast 'trans_id'
             iframe.setAttribute('src', newSrc);
             console.log('Zaktualizowano źródło ramki do:', newSrc);
 
             // Przechowaj referencję do tego iframe
             targetIframe = iframe;
+
+            // Parsowanie URL survey, aby uzyskać origin iframe
+            try {
+                const surveyURL = new URL(survey);
+                iframeOrigin = surveyURL.origin;
+                console.log('Ustawiono iframeOrigin:', iframeOrigin);
+            } catch (error) {
+                console.error('Błąd podczas parsowania URL survey:', error);
+            }
         } else {
             console.log('Nie znaleziono iframe z id="survey-iframe".');
         }
@@ -431,8 +469,8 @@
                 if (taskElement) {
                     console.log('Kliknięto element z data-label="task-completed":', taskElement);
 
-                    if (targetIframe && targetIframe.contentWindow) {
-                        // 4. Dodatkowa logika - usunięcie atrybutu 'hidden' z 'background-overlay-feedback'
+                    if (targetIframe && targetIframe.contentWindow && iframeOrigin) {
+                        // Usunięcie atrybutu 'hidden' z 'background-overlay-feedback'
                         const backgroundOverlayFeedback = document.getElementById('background-overlay-feedback');
                         if (backgroundOverlayFeedback) {
                             backgroundOverlayFeedback.removeAttribute('hidden');
@@ -444,11 +482,11 @@
                         // Wyślij wiadomość do iframe
                         targetIframe.contentWindow.postMessage(
                             { typ: 'klikniecie', dane: 'task-completed' }, // Przesyłane dane
-                            'https://form.ux-research.eu' // Dokładny adres iframe
+                            iframeOrigin // Użyj iframeOrigin
                         );
-                        console.log('Wysłano wiadomość do iframe:', targetIframe);
+                        console.log('Wysłano wiadomość do iframe:', { typ: 'klikniecie', dane: 'task-completed' });
                     } else {
-                        console.log('Nie znaleziono docelowego iframe lub iframe nie jest dostępny.');
+                        console.log('Nie znaleziono docelowego iframe, iframeOrigin lub iframe nie jest dostępny.');
                     }
                 } else {
                     console.log('Kliknięto element inny niż task-completed:', event.target);
@@ -468,11 +506,11 @@
         // Skalowanie elementu #base
         scaleBaseElement();
 
+        // Uruchom manipulację iframe
+        manipulateIframes();
+
         // Dodawanie nasłuchiwaczy i logiki zależnej od struktur
         setupAdditionalEventListeners();
-
-        // Uruchom manipulację iframe natychmiast po załadowaniu skryptu
-        manipulateIframes();
 
         // Uruchom nasłuchiwacza na kliknięcia
         setupClickListener();
