@@ -491,12 +491,10 @@
     }
 
     // ----------------------------------------
-    // Inicjalizacja całego skryptu po załadowaniu DOM
+    // Inicjalizacja całego skryptu
     // ----------------------------------------
-    document.addEventListener('DOMContentLoaded', () => {
-        console.log('DOM w pełni załadowany. Rozpoczynam inicjalizację skryptu.');
-
-        // Tworzenie struktury HTML
+    function initializeScript() {
+        // Tworzenie struktur HTML
         createHTMLStructures();
 
         // Skalowanie elementu #base
@@ -510,6 +508,13 @@
 
         // Nasłuchiwanie kliknięć
         setupClickListener();
-    });
+    }
+
+    // ----------------------------------------
+    // Rozpoczęcie działania skryptu
+    // ----------------------------------------
+    // Zakładamy, że skrypt jest umieszczony na końcu <body> lub z atrybutem 'defer'
+    setupResizeListener();
+    checkWindowWidth();
 
 })();
