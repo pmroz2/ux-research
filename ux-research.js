@@ -482,8 +482,8 @@
             console.log('Otrzymano wiadomość z iframe:', event.data);
 
             // Sprawdzenie typu wiadomości
-            if (event.data.typ === 'nextButton') {
-                console.log('Otrzymano wiadomość typu "nextButton"');
+            if (event.data.typ === 'nextButtonClicked') {
+                console.log('Otrzymano wiadomość typu "nextButtonClicked"');
 
                 const backgroundOverlayFeedback = document.getElementById('background-overlay-feedback');
                 if (backgroundOverlayFeedback) {
