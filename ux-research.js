@@ -5,6 +5,7 @@
     // Zmienna do przechowywania referencji do manipulowanego iframe
     // ----------------------------------------
     let targetIframe = null;
+    let iframeOrigin = null; // Dodana zmienna do przechowywania origin iframe
 
     // ----------------------------------------
     // 5. Dodanie nasłuchiwacza na resize z debouncingiem 1000 ms
@@ -298,12 +299,12 @@
             });
 
             // 2. Wysłanie wiadomości do iframe o kliknięciu start-button
-            if (targetIframe && targetIframe.contentWindow) {
+            if (targetIframe && targetIframe.contentWindow && iframeOrigin) {
                 const message = { typ: 'startButtonClicked', dane: 'start-button' };
-                targetIframe.contentWindow.postMessage(message, 'https://form.ux-research.eu'); // Upewnij się, że adres jest poprawny
+                targetIframe.contentWindow.postMessage(message, iframeOrigin); // Użycie przechowywanego origin
                 console.log('Wysłano wiadomość do iframe:', message);
             } else {
-                console.warn('Nie znaleziono docelowego iframe lub iframe nie jest dostępny.');
+                console.warn('Nie znaleziono docelowego iframe, iframe nie jest dostępny lub origin nie jest znane.');
             }
         });
 
@@ -413,6 +414,15 @@
 
             // Przechowaj referencję do tego iframe
             targetIframe = iframe;
+
+            // Parsowanie origin iframe
+            try {
+                const surveyURL = new URL(newSrc);
+                iframeOrigin = surveyURL.origin;
+                console.log('Zdefiniowano origin iframe jako:', iframeOrigin);
+            } catch (error) {
+                console.error('Błąd podczas parsowania URL survey:', error);
+            }
         } else {
             console.log('Nie znaleziono iframe z id="survey-iframe".');
         }
@@ -431,7 +441,7 @@
                 if (taskElement) {
                     console.log('Kliknięto element z data-label="task-completed":', taskElement);
 
-                    if (targetIframe && targetIframe.contentWindow) {
+                    if (targetIframe && targetIframe.contentWindow && iframeOrigin) {
                         // 4. Dodatkowa logika - usunięcie atrybutu 'hidden' z 'background-overlay-feedback'
                         const backgroundOverlayFeedback = document.getElementById('background-overlay-feedback');
                         if (backgroundOverlayFeedback) {
@@ -444,9 +454,9 @@
                         // Wyślij wiadomość do iframe
                         targetIframe.contentWindow.postMessage(
                             { typ: 'klikniecie', dane: 'task-completed' }, // Przesyłane dane
-                            'https://form.ux-research.eu' // Dokładny adres iframe
+                            iframeOrigin // Dokładny adres iframe
                         );
-                        console.log('Wysłano wiadomość do iframe:', targetIframe);
+                        console.log('Wysłano wiadomość do iframe:', { typ: 'klikniecie', dane: 'task-completed' });
                     } else {
                         console.log('Nie znaleziono docelowego iframe lub iframe nie jest dostępny.');
                     }
@@ -456,6 +466,40 @@
             },
             { passive: false }
         );
+    }
+
+    // ----------------------------------------
+    // 6. Dodanie nasłuchiwacza wiadomości od iframe
+    // ----------------------------------------
+    function setupMessageListener() {
+        window.addEventListener('message', function(event) {
+            // Sprawdzenie, czy wiadomość pochodzi z zaufanego origin
+            if (event.origin !== iframeOrigin) {
+                console.info('Nieautoryzowany nadawca:', event.origin);
+                return;
+            }
+
+            console.log('Otrzymano wiadomość z iframe:', event.data);
+
+            // Sprawdzenie typu wiadomości
+            if (event.data.typ === 'nextButton') {
+                console.log('Otrzymano wiadomość typu "nextButton"');
+
+                const backgroundOverlayFeedback = document.getElementById('background-overlay-feedback');
+                if (backgroundOverlayFeedback) {
+                    if (!backgroundOverlayFeedback.hasAttribute('hidden')) {
+                        backgroundOverlayFeedback.setAttribute('hidden', 'true');
+                        console.log('Dodano atrybut "hidden" do #background-overlay-feedback.');
+                    } else {
+                        console.log('#background-overlay-feedback już posiada atrybut "hidden".');
+                    }
+                } else {
+                    console.warn('Nie znaleziono elementu #background-overlay-feedback.');
+                }
+            }
+
+            // Możesz dodać więcej warunków obsługi innych typów wiadomości tutaj
+        });
     }
 
     // ----------------------------------------
@@ -476,6 +520,9 @@
 
         // Uruchom nasłuchiwacza na kliknięcia
         setupClickListener();
+
+        // Dodaj nasłuchiwacza wiadomości od iframe
+        setupMessageListener();
     }
 
 })();
