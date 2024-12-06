@@ -5,7 +5,7 @@
     // Zmienna do przechowywania referencji do manipulowanego iframe
     // ----------------------------------------
     let targetIframe = null;
-    let iframeOrigin = null; // Zmienna do przechowywania origin iframe
+    let iframeOrigin = null; // Dodana zmienna do przechowywania origin iframe
 
     // ----------------------------------------
     // 5. Dodanie nasłuchiwacza na resize z debouncingiem 1000 ms
@@ -197,7 +197,7 @@
 
         const iframe = document.createElement('iframe');
         iframe.className = 'iframe';
-        iframe.id = 'survey-iframe'; // Dodano id "survey-iframe"
+        iframe.id = 'survey-iframe'; // 1. Dodano id "survey-iframe"
 
         const iframeArrow = document.createElement('div');
         iframeArrow.id = 'iframe-arrow';
@@ -389,13 +389,13 @@
     function manipulateIframes() {
         console.log('Rozpoczynam manipulację iframe.');
 
-        const id = getURLParameter('id'); // Zmieniono 'trans_id' na 'id'
+        const id = getURLParameter('id'); // 3. Zmieniono 'trans_id' na 'id'
         const survey = getURLParameter('survey');
 
-        if (id) {
-            console.log('Znaleziono parametr id:', id);
+        if (id) { // 3. Zmieniono 'trans_id' na 'id'
+            console.log('Znaleziono parametr id:', id); // 3. Zmieniono 'trans_id' na 'id'
         } else {
-            console.log('Nie znaleziono parametru id.');
+            console.log('Nie znaleziono parametru id.'); // 3. Zmieniono 'trans_id' na 'id'
         }
 
         if (!survey) {
@@ -403,19 +403,19 @@
             return;
         }
 
-        // Zmieniono selektor iframe na id "survey-iframe"
+        // 2. Zmieniono selektor iframe na id "survey-iframe"
         const iframe = document.getElementById('survey-iframe');
 
         if (iframe) {
             console.log('Znaleziono ramkę z id="survey-iframe":', iframe);
-            const newSrc = survey + (survey.includes('?') ? '&' : '?') + 'user_id=' + encodeURIComponent(id);
+            const newSrc = survey + (survey.includes('?') ? '&' : '?') + 'user_id=' + encodeURIComponent(id); // 3. Używamy 'id' zamiast 'trans_id'
             iframe.setAttribute('src', newSrc);
             console.log('Zaktualizowano źródło ramki do:', newSrc);
 
             // Przechowaj referencję do tego iframe
             targetIframe = iframe;
 
-            // Ustal origin iframe na podstawie nowego src
+            // Parsowanie origin iframe
             try {
                 const surveyURL = new URL(newSrc);
                 iframeOrigin = surveyURL.origin;
@@ -442,7 +442,7 @@
                     console.log('Kliknięto element z data-label="task-completed":', taskElement);
 
                     if (targetIframe && targetIframe.contentWindow && iframeOrigin) {
-                        // Dodatkowa logika - usunięcie atrybutu 'hidden' z 'background-overlay-feedback'
+                        // 4. Dodatkowa logika - usunięcie atrybutu 'hidden' z 'background-overlay-feedback'
                         const backgroundOverlayFeedback = document.getElementById('background-overlay-feedback');
                         if (backgroundOverlayFeedback) {
                             backgroundOverlayFeedback.removeAttribute('hidden');
@@ -482,8 +482,8 @@
             console.log('Otrzymano wiadomość z iframe:', event.data);
 
             // Sprawdzenie typu wiadomości
-            if (event.data.typ === 'nextButtonClicked') {
-                console.log('Otrzymano wiadomość typu "nextButtonClicked"');
+            if (event.data.typ === 'nextButton') {
+                console.log('Otrzymano wiadomość typu "nextButton"');
 
                 const backgroundOverlayFeedback = document.getElementById('background-overlay-feedback');
                 if (backgroundOverlayFeedback) {
