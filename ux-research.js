@@ -323,15 +323,20 @@
         startButton.addEventListener('click', () => {
             console.log('Kliknięto startButton.');
             topOverlay.style.display = 'none';
-            backgroundOverlayStart.setAttribute('hidden', 'true');
+            backgroundOverlayStart.setAttribute('hidden', ''); // Zmieniono z 'true' na samo 'hidden'
             console.log('Top overlay i background-overlay-start zostały ukryte.');
 
+            // ----------------------------------------------
+            // Usunięto fragment zmieniający opacity na 100%
+            // ----------------------------------------------
+            /*
             // 1. Zmiana opacity elementów z klasą .iframe na 100%
             const iframes = document.querySelectorAll('.iframe');
             iframes.forEach(iframe => {
                 iframe.style.opacity = '1'; // Ustawienie opacity na 100%
                 console.log(`Ustawiono opacity na 100% dla iframe:`, iframe);
             });
+            */
 
             // 2. Wysłanie wiadomości do iframe o kliknięciu start-button
             if (targetIframe && targetIframe.contentWindow && iframeOrigin) {
@@ -544,7 +549,7 @@
                 if (backgroundOverlayFeedback) {
                     console.log('Stan przed zmianą atrybutu "hidden":', backgroundOverlayFeedback.hasAttribute('hidden'));
                     if (!backgroundOverlayFeedback.hasAttribute('hidden')) {
-                        backgroundOverlayFeedback.setAttribute('hidden', 'true');
+                        backgroundOverlayFeedback.setAttribute('hidden', ''); // Zmieniono z 'true' na samo 'hidden'
                         console.log('Dodano atrybut "hidden" do #background-overlay-feedback.');
                     } else {
                         console.log('#background-overlay-feedback już posiada atrybut "hidden".');
