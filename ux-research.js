@@ -16,6 +16,7 @@
         window.addEventListener('resize', function() {
             if (resizeTimeout) {
                 clearTimeout(resizeTimeout);
+                console.log('Resetowanie timeoutu resize.');
             }
             resizeTimeout = setTimeout(() => {
                 console.log('Wykryto zmianę rozmiaru okna. Reloadowanie strony.');
@@ -35,6 +36,8 @@
     function checkWindowWidth() {
         const MIN_WIDTH = 1280;
         const currentWidth = window.innerWidth;
+
+        console.log(`Sprawdzanie szerokości okna: ${currentWidth}px`);
 
         if (currentWidth >= MIN_WIDTH) {
             console.log(`Szerokość okna (${currentWidth}px) jest większa lub równa ${MIN_WIDTH}px. Kontynuuję działanie skryptu.`);
@@ -84,6 +87,7 @@
 
         // Pobieramy wszystkie elementy na stronie
         const elements = document.querySelectorAll("*");
+        console.log(`Znaleziono ${elements.length} elementów do analizy skalowania.`);
 
         elements.forEach(element => {
             // Pobieramy pozycję elementu w przestrzeni widoku
@@ -96,6 +100,7 @@
             if (elementBottom > maxBottom) {
                 maxBottom = elementBottom;
                 lowestElement = element;
+                console.log(`Nowy najniższy element: ${element.tagName} z dolną pozycją ${elementBottom}px`);
             }
         });
 
@@ -145,18 +150,21 @@
     // --------------------------------------------------
     function createHTMLStructures() {
         const body = document.querySelector('body');
+        console.log('Tworzenie struktur HTML.');
 
         // background-overlay-start
         const backgroundOverlayStart = document.createElement('div');
         backgroundOverlayStart.id = 'background-overlay-start';
         backgroundOverlayStart.className = 'background-overlay';
         body.appendChild(backgroundOverlayStart);
+        console.log('Dodano #background-overlay-start.');
 
         // background-overlay-feedback
         const backgroundOverlayFeedback = document.createElement('div');
         backgroundOverlayFeedback.id = 'background-overlay-feedback';
         backgroundOverlayFeedback.className = 'background-overlay';
         backgroundOverlayFeedback.hidden = true;
+        console.log('Dodano #background-overlay-feedback z atrybutem hidden.');
 
         const feedbackContentBox = document.createElement('div');
         feedbackContentBox.className = 'content-box';
@@ -188,33 +196,40 @@
         feedbackContentBox.append(feedbackLeftColumn, feedbackRightColumn);
         backgroundOverlayFeedback.appendChild(feedbackContentBox);
         body.appendChild(backgroundOverlayFeedback);
+        console.log('Dodano zawartość do #background-overlay-feedback.');
 
         // iframe-container
         const iframeContainer = document.createElement('div');
         iframeContainer.className = 'iframe-container';
         iframeContainer.id = 'iframe-container';
         iframeContainer.setAttribute('data-visible', 'true');
+        console.log('Dodano #iframe-container z atrybutem data-visible=true.');
 
         const iframe = document.createElement('iframe');
         iframe.className = 'iframe';
         iframe.id = 'survey-iframe'; // 1. Dodano id "survey-iframe"
+        console.log('Stworzono iframe z id "survey-iframe".');
 
         const iframeArrow = document.createElement('div');
         iframeArrow.id = 'iframe-arrow';
         iframeArrow.className = 'iframe-arrow';
+        console.log('Stworzono #iframe-arrow.');
 
         const iframeArrowImg = document.createElement('img');
         iframeArrowImg.src = 'https://1236554drs4231112876vccf4-pawel.s3.eu-north-1.amazonaws.com/ux-research_iframe-arrow.svg';
         iframeArrowImg.alt = 'Arrow';
-
         iframeArrow.appendChild(iframeArrowImg);
+        console.log('Dodano obrazek do #iframe-arrow.');
+
         iframeContainer.append(iframe, iframeArrow);
         body.appendChild(iframeContainer);
+        console.log('Dodano iframe i iframe-arrow do #iframe-container.');
 
         // top-overlay
         const topOverlay = document.createElement('div');
         topOverlay.id = 'top-overlay';
         topOverlay.className = 'top-overlay';
+        console.log('Stworzono #top-overlay.');
 
         const topContentBox = document.createElement('div');
         topContentBox.className = 'content-box';
@@ -226,6 +241,7 @@
         dashedArrow.src = 'https://1236554drs4231112876vccf4-pawel.s3.eu-north-1.amazonaws.com/ux-research_dashed-start-arrow.svg';
         dashedArrow.alt = 'Dashed Arrow';
         topLeftColumn.appendChild(dashedArrow);
+        console.log('Dodano obrazek do left-column w top-overlay.');
 
         const topRightColumn = document.createElement('div');
         topRightColumn.className = 'right-column';
@@ -239,11 +255,13 @@
         const startButton = document.createElement('button');
         startButton.id = 'start-button';
         startButton.textContent = 'Click Me';
+        console.log('Stworzono przycisk #start-button.');
 
         topRightColumn.append(headerText, paragraph, startButton);
         topContentBox.append(topLeftColumn, topRightColumn);
         topOverlay.appendChild(topContentBox);
         body.appendChild(topOverlay);
+        console.log('Dodano zawartość do #top-overlay.');
 
         console.log('Struktury HTML zostały dodane do dokumentu.');
     }
@@ -252,6 +270,8 @@
     // 3. Funkcja do dodawania nasłuchiwaczy i logiki zależnej od struktur
     // ------------------------------------------------------------------------
     function setupAdditionalEventListeners() {
+        console.log('Konfiguracja dodatkowych nasłuchiwaczy.');
+
         // Pobieranie elementów
         const startButton = document.getElementById('start-button');
         const topOverlay = document.getElementById('top-overlay');
@@ -261,6 +281,16 @@
         const backgroundOverlayStart = document.getElementById('background-overlay-start');
         const backgroundOverlayFeedback = document.getElementById('background-overlay-feedback');
 
+        console.log('Pobrane elementy DOM:', {
+            startButton,
+            topOverlay,
+            iframeArrow,
+            iframeArrowImg,
+            iframeContainer,
+            backgroundOverlayStart,
+            backgroundOverlayFeedback
+        });
+
         // Sprawdzenie, czy wszystkie elementy zostały poprawnie znalezione
         if (!startButton || !topOverlay || !iframeArrow || !iframeArrowImg || !iframeContainer || !backgroundOverlayStart || !backgroundOverlayFeedback) {
             console.warn('Niektóre elementy wymagane do nasłuchiwaczy nie zostały znalezione.');
@@ -269,24 +299,29 @@
 
         // Funkcja uruchamiająca animację shake
         function triggerShake() {
+            console.log('Wywołanie animacji shake na startButton.');
             startButton.classList.add('shake');
             setTimeout(() => {
                 startButton.classList.remove('shake');
+                console.log('Usunięto klasę shake z startButton.');
             }, 500);
         }
 
         // Funkcja do ukrywania iframe-arrow z animacją fade
         function hideIframeArrow() {
+            console.log('Ukrywanie iframe-arrow z animacją fade.');
             iframeArrow.classList.add('hidden-fade');
         }
 
         // Funkcja do pokazywania iframe-arrow z animacją fade
         function showIframeArrow() {
+            console.log('Pokazywanie iframe-arrow z animacją fade.');
             iframeArrow.classList.remove('hidden-fade');
         }
 
         // Ukrycie top-overlay po kliknięciu w button i ukrycie background-overlay-start
         startButton.addEventListener('click', () => {
+            console.log('Kliknięto startButton.');
             topOverlay.style.display = 'none';
             backgroundOverlayStart.setAttribute('hidden', 'true');
             console.log('Top overlay i background-overlay-start zostały ukryte.');
@@ -310,7 +345,9 @@
 
         // Obsługa kliknięcia na iframe-arrow
         iframeArrow.addEventListener('click', () => {
+            console.log('Kliknięto iframe-arrow.');
             const isVisible = iframeContainer.getAttribute('data-visible') === 'true';
+            console.log(`Aktualna widoczność iframeContainer: ${isVisible}`);
 
             if (isVisible) {
                 iframeContainer.classList.add('hidden');
@@ -328,8 +365,11 @@
         // Nasłuch kliknięcia na top-overlay
         topOverlay.addEventListener('click', (event) => {
             if (!event.target.closest('#start-button')) {
+                console.log('Kliknięto poza start-button.');
                 triggerShake();
-                console.log('Kliknięto poza start-button, wywołano animację shake.');
+                console.log('Wywołano animację shake.');
+            } else {
+                console.log('Kliknięto start-button w top-overlay.');
             }
         });
 
@@ -338,6 +378,7 @@
             for (const mutation of mutationsList) {
                 if (mutation.type === 'attributes' && mutation.attributeName === 'hidden') {
                     const isHidden = backgroundOverlayFeedback.hasAttribute('hidden');
+                    console.log(`background-overlay-feedback atrybut 'hidden' zmieniony na: ${isHidden}`);
 
                     if (!isHidden) {
                         // background-overlay-feedback stało się widoczne
@@ -346,13 +387,15 @@
 
                         // Sprawdzenie, czy iframe-container jest schowany
                         const isIframeHidden = iframeContainer.classList.contains('hidden') || iframeContainer.getAttribute('data-visible') === 'false';
+                        console.log(`Czy iframeContainer jest ukryty? ${isIframeHidden}`);
 
                         if (isIframeHidden) {
                             // Wyzwalanie kliknięcia na iframe-arrow, aby pokazać iframe-container
                             // Używamy setTimeout, aby upewnić się, że fade-out animacja się wykona
                             setTimeout(() => {
+                                console.log('Wywołano kliknięcie na iframe-arrow z setTimeout.');
                                 iframeArrow.click();
-                                console.log('Wywołano kliknięcie na iframe-arrow, aby pokazać iframe-container.');
+                                console.log('Kliknięcie na iframe-arrow zostało wywołane.');
                             }, 200); // Czas trwania fade-out w CSS
                         }
                     } else {
@@ -366,9 +409,8 @@
 
         // Inicjalizacja MutationObserver
         const observer = new MutationObserver(handleBackgroundOverlayFeedbackChange);
-
-        // Konfiguracja obserwatora do monitorowania atrybutów
         observer.observe(backgroundOverlayFeedback, { attributes: true });
+        console.log('MutationObserver dla background-overlay-feedback został zainicjalizowany.');
 
         console.log('Dodatkowe nasłuchiwacze i logika zostały skonfigurowane.');
     }
@@ -379,10 +421,13 @@
 
     // Funkcja do pobierania parametrów URL
     function getURLParameter(name) {
+        console.log(`Pobieranie parametru URL: ${name}`);
         name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
         const regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
         const results = regex.exec(location.search);
-        return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+        const param = results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+        console.log(`Znaleziony parametr ${name}: ${param}`);
+        return param;
     }
 
     // Funkcja do manipulacji iframe
@@ -414,6 +459,7 @@
 
             // Przechowaj referencję do tego iframe
             targetIframe = iframe;
+            console.log('Przechowano referencję do targetIframe.');
 
             // Parsowanie origin iframe
             try {
@@ -436,6 +482,7 @@
         document.addEventListener(
             'click',
             function(event) {
+                console.log('Wykryto kliknięcie:', event.target);
                 var taskElement = event.target.closest('[data-label="task-completed"]');
 
                 if (taskElement) {
@@ -466,20 +513,28 @@
             },
             { passive: false }
         );
+
+        console.log('Nasłuchiwacz na kliknięcia został dodany.');
     }
 
     // ----------------------------------------
     // 6. Dodanie nasłuchiwacza wiadomości od iframe
     // ----------------------------------------
     function setupMessageListener() {
+        console.log('Dodawanie nasłuchiwacza wiadomości od iframe.');
+
         window.addEventListener('message', function(event) {
+            console.log('Otrzymano wiadomość:', event.data);
+            console.log('event.origin:', event.origin);
+            console.log('Oczekiwany iframeOrigin:', iframeOrigin);
+
             // Sprawdzenie, czy wiadomość pochodzi z zaufanego origin
             if (event.origin !== iframeOrigin) {
                 console.info('Nieautoryzowany nadawca:', event.origin);
                 return;
             }
 
-            console.log('Otrzymano wiadomość z iframe:', event.data);
+            console.log('Wiadomość pochodzi z zaufanego origin.');
 
             // Sprawdzenie typu wiadomości
             if (event.data.typ === 'nextButton') {
@@ -487,25 +542,33 @@
 
                 const backgroundOverlayFeedback = document.getElementById('background-overlay-feedback');
                 if (backgroundOverlayFeedback) {
+                    console.log('Stan przed zmianą atrybutu "hidden":', backgroundOverlayFeedback.hasAttribute('hidden'));
                     if (!backgroundOverlayFeedback.hasAttribute('hidden')) {
                         backgroundOverlayFeedback.setAttribute('hidden', 'true');
                         console.log('Dodano atrybut "hidden" do #background-overlay-feedback.');
                     } else {
                         console.log('#background-overlay-feedback już posiada atrybut "hidden".');
                     }
+                    console.log('Stan po zmianie atrybutu "hidden":', backgroundOverlayFeedback.hasAttribute('hidden'));
                 } else {
                     console.warn('Nie znaleziono elementu #background-overlay-feedback.');
                 }
+            } else {
+                console.log('Otrzymano wiadomość innego typu:', event.data.typ);
             }
 
             // Możesz dodać więcej warunków obsługi innych typów wiadomości tutaj
         });
+
+        console.log('Nasłuchiwacz wiadomości od iframe został dodany.');
     }
 
     // ----------------------------------------
     // Inicjalizacja całego skryptu
     // ----------------------------------------
     function initializeScript() {
+        console.log('Inicjalizacja skryptu.');
+
         // Tworzenie struktur HTML
         createHTMLStructures();
 
@@ -523,6 +586,8 @@
 
         // Dodaj nasłuchiwacza wiadomości od iframe
         setupMessageListener();
+
+        console.log('Skrypt został zainicjalizowany.');
     }
 
 })();
