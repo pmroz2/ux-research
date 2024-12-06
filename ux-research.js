@@ -290,7 +290,14 @@
             backgroundOverlayStart.setAttribute('hidden', 'true');
             console.log('Top overlay i background-overlay-start zostały ukryte.');
 
-            // 1. Wysłanie wiadomości do iframe o kliknięciu start-button
+            // 1. Zmiana opacity elementów z klasą .iframe na 100%
+            const iframes = document.querySelectorAll('.iframe');
+            iframes.forEach(iframe => {
+                iframe.style.opacity = '1'; // Ustawienie opacity na 100%
+                console.log(`Ustawiono opacity na 100% dla iframe:`, iframe);
+            });
+
+            // 2. Wysłanie wiadomości do iframe o kliknięciu start-button
             if (targetIframe && targetIframe.contentWindow) {
                 const message = { typ: 'startButtonClicked', dane: 'start-button' };
                 targetIframe.contentWindow.postMessage(message, 'https://form.ux-research.eu'); // Upewnij się, że adres jest poprawny
@@ -361,41 +368,6 @@
 
         // Konfiguracja obserwatora do monitorowania atrybutów
         observer.observe(backgroundOverlayFeedback, { attributes: true });
-
-        // ----------------------------------------
-        // 4. Dodanie nasłuchiwacza na wiadomości z iframe
-        // ----------------------------------------
-        function setupMessageListener() {
-            window.addEventListener('message', (event) => {
-                // Sprawdzenie, czy wiadomość pochodzi od zaufanego nadawcy
-                if (event.origin === 'https://form.ux-research.eu') { // Upewnij się, że adres jest poprawny
-                    console.log('Otrzymano wiadomość z dozwolonego źródła:', event.data);
-
-                    // Sprawdzenie typu akcji
-                    if (event.data.typ === 'nextButtonClicked') {
-                        console.log('Otrzymano akcję: next button');
-
-                        // Sprawdzenie, czy element #background-overlay-feedback ma atrybut 'hidden'
-                        const feedbackOverlay = document.getElementById('background-overlay-feedback');
-                        if (feedbackOverlay) {
-                            if (!feedbackOverlay.hasAttribute('hidden')) {
-                                feedbackOverlay.setAttribute('hidden', 'true');
-                                console.log('Dodano atrybut "hidden" do #background-overlay-feedback.');
-                            } else {
-                                console.log('#background-overlay-feedback już ma atrybut "hidden". Nie wykonano żadnych działań.');
-                            }
-                        } else {
-                            console.warn('Nie znaleziono elementu #background-overlay-feedback.');
-                        }
-                    }
-                } else {
-                    console.info('Nieautoryzowany nadawca:', event.origin);
-                }
-            });
-        }
-
-        // Uruchomienie nasłuchiwacza na wiadomości
-        setupMessageListener();
 
         console.log('Dodatkowe nasłuchiwacze i logika zostały skonfigurowane.');
     }
@@ -474,7 +446,7 @@
                             { typ: 'klikniecie', dane: 'task-completed' }, // Przesyłane dane
                             'https://form.ux-research.eu' // Dokładny adres iframe
                         );
-                        console.log('Wysłano wiadomość do iframe:', { typ: 'klikniecie', dane: 'task-completed' });
+                        console.log('Wysłano wiadomość do iframe:', targetIframe);
                     } else {
                         console.log('Nie znaleziono docelowego iframe lub iframe nie jest dostępny.');
                     }
