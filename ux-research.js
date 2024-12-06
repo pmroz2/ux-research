@@ -1,5 +1,5 @@
 (function() {
-    console.log('Skrypt został załadowany i uruchomiony.');
+    console.log('Skrypt rodzica został załadowany i uruchomiony.');
 
     // ----------------------------------------
     // Zmienna do przechowywania referencji do manipulowanego iframe
@@ -25,9 +25,6 @@
 
         console.log('Nasłuchiwacz resize z debouncingiem 1000 ms został dodany.');
     }
-
-    // Uruchom nasłuchiwacza na resize
-    setupResizeListener();
 
     // ----------------------------------------
     // 0. Sprawdzenie szerokości okna
@@ -71,9 +68,6 @@
             console.log('Dodaj odpowiednie style do pliku CSS dla klas .window-size-alert-txt i .window-size-alert-icon.');
         }
     }
-
-    // Uruchom sprawdzenie szerokości okna
-    checkWindowWidth();
 
     // ----------------------------------------
     // 1. Funkcja do skalowania elementu #base
@@ -497,23 +491,25 @@
     }
 
     // ----------------------------------------
-    // Inicjalizacja całego skryptu
+    // Inicjalizacja całego skryptu po załadowaniu DOM
     // ----------------------------------------
-    function initializeScript() {
-        // Tworzenie struktur HTML
+    document.addEventListener('DOMContentLoaded', () => {
+        console.log('DOM w pełni załadowany. Rozpoczynam inicjalizację skryptu.');
+
+        // Tworzenie struktury HTML
         createHTMLStructures();
 
         // Skalowanie elementu #base
         scaleBaseElement();
 
-        // Uruchom manipulację iframe
+        // Manipulacja iframe
         manipulateIframes();
 
         // Dodawanie nasłuchiwaczy i logiki zależnej od struktur
         setupAdditionalEventListeners();
 
-        // Uruchom nasłuchiwacza na kliknięcia
+        // Nasłuchiwanie kliknięć
         setupClickListener();
-    }
+    });
 
 })();
