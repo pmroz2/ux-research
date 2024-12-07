@@ -152,7 +152,74 @@
         const body = document.querySelector('body');
         console.log('Tworzenie struktur HTML.');
 
+        // ----------------------------------------
+        // Nowa struktura: checkOverlay
+        // ----------------------------------------
+        const checkOverlay = document.createElement('div');
+        checkOverlay.id = 'checkOverlay';
+        console.log('Tworzenie #checkOverlay.');
+
+        const floatingWrapper = document.createElement('div');
+        floatingWrapper.id = 'floatingWrapper';
+        console.log('Tworzenie #floatingWrapper.');
+
+        const successCheckmark = document.createElement('div');
+        successCheckmark.className = 'success-checkmark';
+        console.log('Tworzenie .success-checkmark.');
+
+        const checkIcon = document.createElement('div');
+        checkIcon.className = 'check-icon';
+        console.log('Tworzenie .check-icon.');
+
+        const iconLineTip = document.createElement('span');
+        iconLineTip.className = 'icon-line line-tip';
+        checkIcon.appendChild(iconLineTip);
+        console.log('Dodawanie .icon-line.line-tip do .check-icon.');
+
+        const iconLineLong = document.createElement('span');
+        iconLineLong.className = 'icon-line line-long';
+        checkIcon.appendChild(iconLineLong);
+        console.log('Dodawanie .icon-line.line-long do .check-icon.');
+
+        const iconCircle = document.createElement('div');
+        iconCircle.className = 'icon-circle';
+        checkIcon.appendChild(iconCircle);
+        console.log('Dodawanie .icon-circle do .check-icon.');
+
+        const iconFix = document.createElement('div');
+        iconFix.className = 'icon-fix';
+        checkIcon.appendChild(iconFix);
+        console.log('Dodawanie .icon-fix do .check-icon.');
+
+        successCheckmark.appendChild(checkIcon);
+        console.log('Dodawanie .check-icon do .success-checkmark.');
+
+        floatingWrapper.appendChild(successCheckmark);
+        console.log('Dodawanie .success-checkmark do #floatingWrapper.');
+
+        checkOverlay.appendChild(floatingWrapper);
+        console.log('Dodawanie #floatingWrapper do #checkOverlay.');
+
+        const loaderBox = document.createElement('div');
+        loaderBox.id = 'loaderBox';
+        loaderBox.className = 'loader-box-hide';
+        console.log('Tworzenie #loaderBox z klasą .loader-box-hide.');
+
+        const loaderImg = document.createElement('img');
+        loaderImg.src = 'https://1236554drs4231112876vccf4-pawel.s3.eu-north-1.amazonaws.com/trans-loader.gif';
+        loaderImg.alt = 'Loading';
+        loaderBox.appendChild(loaderImg);
+        console.log('Dodawanie obrazka do #loaderBox.');
+
+        checkOverlay.appendChild(loaderBox);
+        console.log('Dodawanie #loaderBox do #checkOverlay.');
+
+        body.appendChild(checkOverlay);
+        console.log('Dodano #checkOverlay do body.');
+
+        // ----------------------------------------
         // background-overlay-start
+        // ----------------------------------------
         const backgroundOverlayStart = document.createElement('div');
         backgroundOverlayStart.id = 'background-overlay-start';
         backgroundOverlayStart.className = 'background-overlay';
