@@ -16,16 +16,16 @@ html, body {
     height: 100%;
     background-color: rgba(0, 0, 0, 0.90);
     z-index: 1000;
-    opacity: 1;
+    opacity: 0; /* początkowo niewidoczny */
     transition: opacity 200ms ease; /* Animacja fade */
-    backdrop-filter: blur(5px); /* Efekt rozmycia */
-    -webkit-backdrop-filter: blur(5px); /* Dla wsparcia WebKit */
-
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    pointer-events: none; /* Wyłączenie interakcji, gdy niewidoczne */
 }
 
-.background-overlay[hidden] {
-    opacity: 0; /* Ukrycie fade-out */
-    pointer-events: none; /* Wyłączenie interakcji */
+.background-overlay.show {
+    opacity: 1; /* po dodaniu klasy show, fade-in */
+    pointer-events: auto;
 }
 
 .iframe-container {
