@@ -442,3 +442,9 @@ html, body {
   max-width: 25%;
   max-height: 25%;
 }
+
+#initial-loader {
+    opacity: 1;
+    transition: opacity 200ms ease;
+}
+
