@@ -513,40 +513,43 @@
                 }
             } else if (event.data.typ === 'showFeedbackOverlay') {
                 console.log('Otrzymano wiadomość typu "showFeedbackOverlay"');
-                // Ukrywanie elementów analogicznie do kliknięcia w "hideDivButton" w skrypcie nr 2
-                const checkOverlay = document.getElementById("checkOverlay");
-                const floatingWrapper = document.getElementById("floatingWrapper");
-                const loaderBox = document.getElementById("loaderBox");
-                const backgroundOverlayFeedback = document.getElementById('background-overlay-feedback');
+                
+                // Dodanie opóźnienia 2 sekund przed wykonaniem istniejącej logiki
+                setTimeout(() => {
+                    // Ukrywanie elementów analogicznie do kliknięcia w "hideDivButton" w skrypcie nr 2
+                    const checkOverlay = document.getElementById("checkOverlay");
+                    const floatingWrapper = document.getElementById("floatingWrapper");
+                    const loaderBox = document.getElementById("loaderBox");
+                    const backgroundOverlayFeedback = document.getElementById('background-overlay-feedback');
 
-                if (checkOverlay && floatingWrapper && loaderBox) {
-                    // Ukrywanie floatingWrapper
-                    floatingWrapper.classList.remove("floating-wrapper-show");
-                    floatingWrapper.classList.add("floating-wrapper-hide");
+                    if (checkOverlay && floatingWrapper && loaderBox) {
+                        // Ukrywanie floatingWrapper
+                        floatingWrapper.classList.remove("floating-wrapper-show");
+                        floatingWrapper.classList.add("floating-wrapper-hide");
 
-                    // Ukrywanie loaderBox
-                    loaderBox.classList.remove("loader-box-show");
-                    loaderBox.classList.add("loader-box-hide");
+                        // Ukrywanie loaderBox
+                        loaderBox.classList.remove("loader-box-show");
+                        loaderBox.classList.add("loader-box-hide");
 
-                    // Po 200ms ukryj floatingWrapper i checkOverlay
-                    setTimeout(() => {
-                        floatingWrapper.style.display = "none";
-                        floatingWrapper.classList.remove("floating-wrapper-hide");
-                        checkOverlay.style.display = "none";
+                        // Po 200ms ukryj floatingWrapper i checkOverlay
+                        setTimeout(() => {
+                            floatingWrapper.style.display = "none";
+                            floatingWrapper.classList.remove("floating-wrapper-hide");
+                            checkOverlay.style.display = "none";
 
-                        // Zatrzymaj śledzenie kursora
-                        document.removeEventListener("mousemove", followCursor);
+                            // Zatrzymaj śledzenie kursora
+                            document.removeEventListener("mousemove", followCursor);
 
-                        // Teraz usuwamy hidden z background-overlay-feedback
-                        if (backgroundOverlayFeedback) {
-                            backgroundOverlayFeedback.removeAttribute('hidden');
-                            console.log('Usunięto atrybut "hidden" z #background-overlay-feedback po ukryciu elementów.');
-                        }
-                    }, 200);
-                } else {
-                    console.warn("Brak niezbędnych elementów do ukrycia (checkOverlay, floatingWrapper, loaderBox).");
-                }
-
+                            // Teraz usuwamy hidden z background-overlay-feedback
+                            if (backgroundOverlayFeedback) {
+                                backgroundOverlayFeedback.removeAttribute('hidden');
+                                console.log('Usunięto atrybut "hidden" z #background-overlay-feedback po ukryciu elementów.');
+                            }
+                        }, 200);
+                    } else {
+                        console.warn("Brak niezbędnych elementów do ukrycia (checkOverlay, floatingWrapper, loaderBox).");
+                    }
+                }, 2000); // Opóźnienie 2000 ms (2 sekundy)
             } else {
                 console.log('Otrzymano wiadomość innego typu:', event.data.typ);
             }
