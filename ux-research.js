@@ -4,9 +4,8 @@
     let targetIframe = null;
     let iframeOrigin = null;
 
-    // Funkcja do ustawiania pozycji wrappera
     function positionWrapper(x, y) {
-        const offset = 60; // Offset dla wyświetlenia nad kursorem
+        const offset = 60; 
         const floatingWrapper = document.getElementById("floatingWrapper");
         if (floatingWrapper) {
             floatingWrapper.style.top = `${y - offset}px`;
@@ -14,12 +13,10 @@
         }
     }
 
-    // Funkcja śledząca ruch kursora
     function followCursor(e) {
         positionWrapper(e.clientX, e.clientY);
     }
 
-    // Dodanie nasłuchiwacza na resize z debouncingiem 1000 ms
     function setupResizeListener() {
         let resizeTimeout;
         window.addEventListener('resize', function() {
@@ -128,19 +125,15 @@
 
         const checkOverlay = document.createElement('div');
         checkOverlay.id = 'checkOverlay';
-        console.log('Tworzenie #checkOverlay.');
 
         const floatingWrapper = document.createElement('div');
         floatingWrapper.id = 'floatingWrapper';
-        console.log('Tworzenie #floatingWrapper.');
 
         const successCheckmark = document.createElement('div');
         successCheckmark.className = 'success-checkmark';
-        console.log('Tworzenie .success-checkmark.');
 
         const checkIcon = document.createElement('div');
         checkIcon.className = 'check-icon';
-        console.log('Tworzenie .check-icon.');
 
         const iconLineTip = document.createElement('span');
         iconLineTip.className = 'icon-line line-tip';
@@ -179,12 +172,11 @@
         backgroundOverlayStart.className = 'background-overlay fade fade-visible'; 
         body.appendChild(backgroundOverlayStart);
 
-        // background-overlay-feedback będzie domyślnie ukryty
         const backgroundOverlayFeedback = document.createElement('div');
         backgroundOverlayFeedback.id = 'background-overlay-feedback';
         backgroundOverlayFeedback.className = 'background-overlay fade fade-hidden';
         backgroundOverlayFeedback.style.display = 'none'; 
-        // Gdy będzie trzeba go pokazać, zmienimy klasy i display w JS
+        body.appendChild(backgroundOverlayFeedback);
 
         const feedbackContentBox = document.createElement('div');
         feedbackContentBox.className = 'content-box';
@@ -215,7 +207,6 @@
         feedbackRightColumn.append(feedbackIcon, feedbackAlert, feedbackMessage);
         feedbackContentBox.append(feedbackLeftColumn, feedbackRightColumn);
         backgroundOverlayFeedback.appendChild(feedbackContentBox);
-        body.appendChild(backgroundOverlayFeedback);
 
         const iframeContainer = document.createElement('div');
         iframeContainer.className = 'iframe-container';
@@ -311,7 +302,7 @@
         startButton.addEventListener('click', () => {
             console.log('Kliknięto startButton.');
             topOverlay.style.display = 'none';
-            backgroundOverlayStart.style.display = 'none'; // zamiast hidden
+            backgroundOverlayStart.style.display = 'none'; 
 
             if (targetIframe && targetIframe.contentWindow && iframeOrigin) {
                 const message = { typ: 'startButtonClicked', dane: 'start-button' };
@@ -350,17 +341,26 @@
 
         // Funkcje pokazujące/ukrywające background-overlay-feedback
         function showFeedbackOverlay() {
-            // Natychmiast display block, potem po raf dodać klasę fade-visible
             backgroundOverlayFeedback.style.display = 'block';
             requestAnimationFrame(() => {
                 backgroundOverlayFeedback.classList.remove('fade-hidden');
                 backgroundOverlayFeedback.classList.add('fade-visible');
+                hideIframeArrow();
+                
+                // Sprawdzamy czy iframeContainer jest ukryte
+                const isIframeVisible = iframeContainer.getAttribute('data-visible') === 'true';
+                if (!isIframeVisible) {
+                    // Jeśli iframe jest ukryte, symulujemy kliknięcie w iframe-arrow,
+                    // tak jak robiliśmy to wcześniej gdy sprawdzaliśmy atrybut hidden.
+                    setTimeout(() => {
+                        console.log('Wywołano kliknięcie na iframe-arrow w ramach logiki showFeedbackOverlay.');
+                        iframeArrow.click();
+                    }, 200);
+                }
             });
-            hideIframeArrow(); 
         }
 
         function hideFeedbackOverlay() {
-            // Przejście do fade-hidden i po zakończeniu transition zmiana display
             backgroundOverlayFeedback.classList.remove('fade-visible');
             backgroundOverlayFeedback.classList.add('fade-hidden');
         }
@@ -373,7 +373,7 @@
             }
         });
 
-        // Udostępnienie funkcji globalnie do wykorzystania przy odbiorze wiadomości
+        // Udostępniamy globalnie do wykorzystania w setupMessageListener
         window.showFeedbackOverlay = showFeedbackOverlay;
         window.hideFeedbackOverlay = hideFeedbackOverlay;
     }
@@ -442,37 +442,29 @@
                     const iframeContainer = document.getElementById('iframe-container');
 
                     if (checkOverlay && floatingWrapper && loaderBox && iframeContainer) {
-                        // Wyświetl checkOverlay
                         checkOverlay.style.display = "flex";
 
-                        // Pozycjonowanie wrappera względem aktualnego kliknięcia
                         positionWrapper(event.clientX, event.clientY);
 
-                        // Pokaż floatingWrapper z animacją
                         floatingWrapper.classList.remove("floating-wrapper-hide");
                         floatingWrapper.style.display = "flex";
                         floatingWrapper.classList.add("floating-wrapper-show");
 
-                        // Sprawdź widoczność iframeContainer
                         const isIframeVisible = iframeContainer.getAttribute('data-visible') === 'true';
 
                         if (isIframeVisible) {
-                            // Jeśli iframe jest widoczny, to pokazujemy loaderBox
                             loaderBox.classList.remove("loader-box-hide");
                             loaderBox.classList.add("loader-box-show");
                         } else {
-                            // Jeśli iframe nie jest widoczny, ukrywamy loaderBox poprzez klasy
                             loaderBox.classList.remove("loader-box-show");
                             loaderBox.classList.add("loader-box-hide");
                         }
 
-                        // Rozpocznij śledzenie kursora
                         document.addEventListener("mousemove", followCursor);
                     } else {
                         console.warn("Brak elementów do wyświetlenia (checkOverlay, floatingWrapper, loaderBox, iframeContainer).");
                     }
 
-                    // Po 2 sekundach wyślij wiadomość do iframe (niezależnie od widoczności loaderBox)
                     setTimeout(() => {
                         if (targetIframe && targetIframe.contentWindow && iframeOrigin) {
                             targetIframe.contentWindow.postMessage(
@@ -515,38 +507,28 @@
 
             if (event.data.typ === 'nextButton') {
                 console.log('Otrzymano wiadomość typu "nextButton"');
-
-                // Ukrywanie backgroundOverlayFeedback jeśli jest widoczne
                 if (backgroundOverlayFeedback && backgroundOverlayFeedback.classList.contains('fade-visible')) {
                     window.hideFeedbackOverlay();
                 }
-
             } else if (event.data.typ === 'showFeedbackOverlay') {
                 console.log('Otrzymano wiadomość typu "showFeedbackOverlay"');
                 
-                // Dodanie opóźnienia 2 sekund przed wykonaniem istniejącej logiki
                 setTimeout(() => {
                     if (checkOverlay && floatingWrapper && loaderBox) {
-                        // Ukrywanie floatingWrapper
                         floatingWrapper.classList.remove("floating-wrapper-show");
                         floatingWrapper.classList.add("floating-wrapper-hide");
 
-                        // Ukrywanie loaderBox
                         loaderBox.classList.remove("loader-box-show");
                         loaderBox.classList.add("loader-box-hide");
 
-                        // Po 200ms ukryj floatingWrapper i checkOverlay
                         setTimeout(() => {
                             floatingWrapper.style.display = "none";
                             floatingWrapper.classList.remove("floating-wrapper-hide");
                             checkOverlay.style.display = "none";
 
-                            // Zatrzymaj śledzenie kursora
                             document.removeEventListener("mousemove", followCursor);
 
-                            // Teraz pokazujemy feedback overlay
                             window.showFeedbackOverlay();
-
                         }, 200);
                     } else {
                         console.warn("Brak niezbędnych elementów do ukrycia (checkOverlay, floatingWrapper, loaderBox).");
@@ -564,7 +546,6 @@
         console.log('Inicjalizacja skryptu.');
         createHTMLStructures();
 
-        // Początkowo ukryj checkOverlay
         const checkOverlay = document.getElementById('checkOverlay');
         if (checkOverlay) {
             checkOverlay.style.display = "none";
