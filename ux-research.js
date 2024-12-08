@@ -467,11 +467,11 @@
                                 { typ: 'klikniecie', dane: 'task-completed' },
                                 iframeOrigin
                             );
-                            console.log('Wysłano wiadomość do iframe (po 2s):', { typ: 'klikniecie', dane: 'task-completed' });
+                            console.log('Wysłano wiadomość do iframe (po 1s):', { typ: 'klikniecie', dane: 'task-completed' });
                         } else {
                             console.log('Nie znaleziono docelowego iframe lub brak origin.');
                         }
-                    }, 2000);
+                    }, 1000);
                 } else {
                     console.log('Kliknięto element inny niż task-completed:', event.target);
                 }
