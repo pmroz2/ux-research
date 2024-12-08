@@ -457,8 +457,9 @@
                         loaderBox.classList.remove("loader-box-hide");
                         loaderBox.classList.add("loader-box-show");
                     } else {
-                        // Jeśli iframe nie jest widoczny, nie pokazujemy loaderBox
-                        loaderBox.style.display = 'none';
+                        // Jeśli iframe nie jest widoczny, ukrywamy loaderBox poprzez klasy
+                        loaderBox.classList.remove("loader-box-show");
+                        loaderBox.classList.add("loader-box-hide");
                     }
 
                     // Rozpocznij śledzenie kursora
