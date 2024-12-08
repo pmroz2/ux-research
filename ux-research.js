@@ -229,6 +229,10 @@
         iframeContainer.append(iframe, iframeArrow);
         body.appendChild(iframeContainer);
 
+        // Dodanie transition dla szerokości iframe-container
+        iframeContainer.style.transition = 'transform 300ms ease-out, width 500ms ease-in';
+        console.log('Dodano transition dla szerokości iframe-container.');
+
         const topOverlay = document.createElement('div');
         topOverlay.id = 'top-overlay';
         topOverlay.className = 'top-overlay';
@@ -555,7 +559,17 @@
                         console.warn('Nie znaleziono elementu o id "initial-loader".');
                     }
                 }, 1000);
-            } else {
+            } 
+            // Obsługa nowego typu wiadomości "flowFinished"
+            else if (event.data.typ === 'flowFinished') {
+                console.log('Otrzymano wiadomość typu "flowFinished"');
+                const iframeContainers = document.querySelectorAll('.iframe-container');
+                iframeContainers.forEach(container => {
+                    container.style.width = '100%';
+                    console.log('Zmieniono szerokość .iframe-container na 100% z animacją.');
+                });
+            }
+            else {
                 console.log('Otrzymano wiadomość innego typu:', event.data.typ);
             }
         });
