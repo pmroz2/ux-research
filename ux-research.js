@@ -4,9 +4,8 @@
     let targetIframe = null;
     let iframeOrigin = null;
 
-    // Funkcja do ustawiania pozycji wrappera (z skryptu nr 2)
     function positionWrapper(x, y) {
-        const offset = 60; // Offset dla wyświetlenia nad kursorem
+        const offset = 60;
         const floatingWrapper = document.getElementById("floatingWrapper");
         if (floatingWrapper) {
             floatingWrapper.style.top = `${y - offset}px`;
@@ -14,12 +13,10 @@
         }
     }
 
-    // Funkcja śledząca ruch kursora (z skryptu nr 2)
     function followCursor(e) {
         positionWrapper(e.clientX, e.clientY);
     }
 
-    // Dodanie nasłuchiwacza na resize z debouncingiem 1000 ms
     function setupResizeListener() {
         let resizeTimeout;
         window.addEventListener('resize', function() {
@@ -78,8 +75,8 @@
     function scaleBaseElement() {
         let maxBottom = 0; 
         let lowestElement = null; 
-
         const elements = document.querySelectorAll("*");
+
         console.log(`Znaleziono ${elements.length} elementów do analizy skalowania.`);
 
         elements.forEach(element => {
@@ -176,17 +173,16 @@
 
         const backgroundOverlayStart = document.createElement('div');
         backgroundOverlayStart.id = 'background-overlay-start';
-        backgroundOverlayStart.className = 'background-overlay';
-        // Domyślnie ukryty (ustawione w CSS display:none nie jest konieczne, bo można i tak zarządzać)
-        backgroundOverlayStart.style.display = 'none';
+        backgroundOverlayStart.className = 'background-overlay'; 
+        // Domyślnie widoczny (opacity:1; display:block w CSS)
         body.appendChild(backgroundOverlayStart);
 
         const backgroundOverlayFeedback = document.createElement('div');
         backgroundOverlayFeedback.id = 'background-overlay-feedback';
-        backgroundOverlayFeedback.className = 'background-overlay';
-        // Domyślnie ukryty
-        backgroundOverlayFeedback.style.display = 'none'; // startowo niewidoczny
-        // Nie dodajemy hidden, używamy klas .show do pokazywania
+        backgroundOverlayFeedback.className = 'background-overlay hidden';
+        // Ukrywamy go na starcie:
+        backgroundOverlayFeedback.style.display = 'none'; 
+
         const feedbackContentBox = document.createElement('div');
         feedbackContentBox.className = 'content-box';
 
@@ -275,27 +271,26 @@
         console.log('Struktury HTML zostały dodane do dokumentu.');
     }
 
-    function showOverlay(overlay) {
-        // Funkcja do pokazania overlay z animacją
-        if (!overlay) return;
-        overlay.style.display = 'block';
-        requestAnimationFrame(() => {
-            overlay.classList.add('show');
-        });
-    }
-
     function hideOverlay(overlay) {
-        // Funkcja do chowania overlay z animacją
         if (!overlay) return;
-        overlay.classList.remove('show');
-        // Po zakończeniu transition ustaw display:none
+        overlay.classList.add('hidden');
+        // Po zakończeniu animacji:
         const onTransitionEnd = function() {
             overlay.removeEventListener('transitionend', onTransitionEnd);
-            if (!overlay.classList.contains('show')) {
+            if (overlay.classList.contains('hidden')) {
                 overlay.style.display = 'none';
             }
         };
         overlay.addEventListener('transitionend', onTransitionEnd);
+    }
+
+    function showOverlay(overlay) {
+        if (!overlay) return;
+        // Pokazywanie - najpierw display:block, a potem usuwamy hidden, by animować opacity:
+        overlay.style.display = 'block';
+        requestAnimationFrame(() => {
+            overlay.classList.remove('hidden');
+        });
     }
 
     function setupAdditionalEventListeners() {
@@ -335,7 +330,7 @@
         startButton.addEventListener('click', () => {
             console.log('Kliknięto startButton.');
             topOverlay.style.display = 'none';
-            // backgroundOverlayStart - chowamy jeśli jest widoczny
+            // Ukryj backgroundOverlayStart
             hideOverlay(backgroundOverlayStart);
             if (targetIframe && targetIframe.contentWindow && iframeOrigin) {
                 const message = { typ: 'startButtonClicked', dane: 'start-button' };
@@ -372,28 +367,21 @@
             }
         });
 
-        // Observowanie background-overlay-feedback bez atrybutu hidden
-        // Teraz nie obserwujemy atrybutów hidden - nie jest to już potrzebne,
-        // ponieważ stosujemy klasy. Jeśli potrzebujesz reakcji na show/hide,
-        // można to zrobić bezpośrednio w miejscach, w których zmieniane są klasy.
-        // Poniższy kod był wcześniej użyty do obserwacji hidden - usuwamy go.
-
-        // Jeśli chcesz reakcję na pojawianie się i znikanie feedback overlay:
         backgroundOverlayFeedback.addEventListener('transitionend', () => {
-            const isShown = backgroundOverlayFeedback.classList.contains('show');
-            console.log(`background-overlay-feedback jest teraz ${isShown ? 'widoczny' : 'niewidoczny'}.`);
-            if (isShown) {
-                // Pojawienie - hide iframe arrow
+            const isHidden = backgroundOverlayFeedback.classList.contains('hidden');
+            console.log(`background-overlay-feedback jest teraz ${isHidden ? 'niewidoczny' : 'widoczny'}.`);
+            if (!isHidden) {
+                // feedback stał się widoczny
                 hideIframeArrow();
-                const iframeContainerIsHidden = iframeContainer.classList.contains('hidden') || iframeContainer.getAttribute('data-visible') === 'false';
-                if (iframeContainerIsHidden) {
+                const isIframeHidden = iframeContainer.classList.contains('hidden') || iframeContainer.getAttribute('data-visible') === 'false';
+                if (isIframeHidden) {
                     setTimeout(() => {
                         console.log('Wywołano kliknięcie na iframe-arrow z setTimeout.');
                         iframeArrow.click();
                     }, 200);
                 }
             } else {
-                // Ukrycie - show iframe arrow
+                // feedback stał się niewidoczny
                 showIframeArrow();
             }
         });
@@ -478,22 +466,18 @@
                         const isIframeVisible = iframeContainer.getAttribute('data-visible') === 'true';
 
                         if (isIframeVisible) {
-                            // Jeśli iframe jest widoczny, to pokazujemy loaderBox
                             loaderBox.classList.remove("loader-box-hide");
                             loaderBox.classList.add("loader-box-show");
                         } else {
-                            // Jeśli iframe nie jest widoczny, ukrywamy loaderBox poprzez klasy
                             loaderBox.classList.remove("loader-box-show");
                             loaderBox.classList.add("loader-box-hide");
                         }
 
-                        // Rozpocznij śledzenie kursora
                         document.addEventListener("mousemove", followCursor);
                     } else {
                         console.warn("Brak elementów do wyświetlenia (checkOverlay, floatingWrapper, loaderBox, iframeContainer).");
                     }
 
-                    // Po 2 sekundach wyślij wiadomość do iframe (niezależnie od widoczności loaderBox)
                     setTimeout(() => {
                         if (targetIframe && targetIframe.contentWindow && iframeOrigin) {
                             targetIframe.contentWindow.postMessage(
@@ -529,6 +513,7 @@
             }
 
             console.log('Wiadomość pochodzi z zaufanego origin.');
+
             const backgroundOverlayFeedback = document.getElementById('background-overlay-feedback');
             const checkOverlay = document.getElementById("checkOverlay");
             const floatingWrapper = document.getElementById("floatingWrapper");
@@ -536,22 +521,17 @@
 
             if (event.data.typ === 'nextButton') {
                 console.log('Otrzymano wiadomość typu "nextButton"');
-                if (backgroundOverlayFeedback) {
-                    // Jeśli widoczny - schowaj
-                    if (backgroundOverlayFeedback.classList.contains('show')) {
-                        hideOverlay(backgroundOverlayFeedback);
-                    } else {
-                        console.log('#background-overlay-feedback jest już ukryty.');
-                    }
+                if (backgroundOverlayFeedback && !backgroundOverlayFeedback.classList.contains('hidden')) {
+                    // Schowaj overlay feedback
+                    hideOverlay(backgroundOverlayFeedback);
                 } else {
-                    console.warn('Nie znaleziono elementu #background-overlay-feedback.');
+                    console.log('#background-overlay-feedback jest już ukryty lub nie znaleziony.');
                 }
+
             } else if (event.data.typ === 'showFeedbackOverlay') {
                 console.log('Otrzymano wiadomość typu "showFeedbackOverlay"');
                 
-                // Dodanie opóźnienia 2 sekund przed wykonaniem istniejącej logiki
                 setTimeout(() => {
-                    // Ukrywanie elementów analogicznie do kliknięcia w "hideDivButton" w skrypcie nr 2
                     if (checkOverlay && floatingWrapper && loaderBox) {
                         // Ukrywanie floatingWrapper
                         floatingWrapper.classList.remove("floating-wrapper-show");
@@ -561,16 +541,14 @@
                         loaderBox.classList.remove("loader-box-show");
                         loaderBox.classList.add("loader-box-hide");
 
-                        // Po 200ms ukryj floatingWrapper i checkOverlay
                         setTimeout(() => {
                             floatingWrapper.style.display = "none";
                             floatingWrapper.classList.remove("floating-wrapper-hide");
                             checkOverlay.style.display = "none";
 
-                            // Zatrzymaj śledzenie kursora
                             document.removeEventListener("mousemove", followCursor);
 
-                            // Teraz pokazujemy background-overlay-feedback
+                            // Pokaż feedback overlay
                             if (backgroundOverlayFeedback) {
                                 showOverlay(backgroundOverlayFeedback);
                                 console.log('Pokazano #background-overlay-feedback po ukryciu elementów.');
@@ -579,7 +557,7 @@
                     } else {
                         console.warn("Brak niezbędnych elementów do ukrycia (checkOverlay, floatingWrapper, loaderBox).");
                     }
-                }, 2000); // Opóźnienie 2000 ms (2 sekundy)
+                }, 2000);
             } else {
                 console.log('Otrzymano wiadomość innego typu:', event.data.typ);
             }
@@ -592,7 +570,6 @@
         console.log('Inicjalizacja skryptu.');
         createHTMLStructures();
 
-        // Początkowo ukryj checkOverlay (tak jak w skrypcie nr 2)
         const checkOverlay = document.getElementById('checkOverlay');
         if (checkOverlay) {
             checkOverlay.style.display = "none";
