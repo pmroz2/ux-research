@@ -422,65 +422,72 @@
     }
 
     function setupClickListener() {
-        console.log('Nasłuchiwanie na kliknięcia...');
-        document.addEventListener(
-            'click',
-            function(event) {
-                console.log('Wykryto kliknięcie:', event.target);
-                var taskElement = event.target.closest('[data-label="task-completed"]');
+    console.log('Nasłuchiwanie na kliknięcia...');
+    document.addEventListener(
+        'click',
+        function(event) {
+            console.log('Wykryto kliknięcie:', event.target);
+            var taskElement = event.target.closest('[data-label="task-completed"]');
 
-                if (taskElement) {
-                    console.log('Kliknięto element z data-label="task-completed":', taskElement);
+            if (taskElement) {
+                console.log('Kliknięto element z data-label="task-completed":', taskElement);
 
-                    // Zamiast usuwania hidden z background-overlay-feedback
-                    // używamy logiki ze skryptu nr 2 do wyświetlenia elementów
-                    const checkOverlay = document.getElementById("checkOverlay");
-                    const floatingWrapper = document.getElementById("floatingWrapper");
-                    const loaderBox = document.getElementById("loaderBox");
+                const checkOverlay = document.getElementById("checkOverlay");
+                const floatingWrapper = document.getElementById("floatingWrapper");
+                const loaderBox = document.getElementById("loaderBox");
+                const iframeContainer = document.getElementById('iframe-container');
 
-                    if (checkOverlay && floatingWrapper && loaderBox) {
-                        // Wyświetl checkOverlay
-                        checkOverlay.style.display = "flex";
+                if (checkOverlay && floatingWrapper && loaderBox && iframeContainer) {
+                    // Wyświetl checkOverlay
+                    checkOverlay.style.display = "flex";
 
-                        // Pozycjonowanie wrappera względem aktualnego kliknięcia
-                        positionWrapper(event.clientX, event.clientY);
+                    // Pozycjonowanie wrappera względem aktualnego kliknięcia
+                    positionWrapper(event.clientX, event.clientY);
 
-                        // Pokaż floatingWrapper z animacją
-                        floatingWrapper.classList.remove("floating-wrapper-hide");
-                        floatingWrapper.style.display = "flex";
-                        floatingWrapper.classList.add("floating-wrapper-show");
+                    // Pokaż floatingWrapper z animacją
+                    floatingWrapper.classList.remove("floating-wrapper-hide");
+                    floatingWrapper.style.display = "flex";
+                    floatingWrapper.classList.add("floating-wrapper-show");
 
-                        // Pokaż loaderBox z animacją
+                    // Sprawdź widoczność iframeContainer
+                    const isIframeVisible = iframeContainer.getAttribute('data-visible') === 'true';
+
+                    if (isIframeVisible) {
+                        // Jeśli iframe jest widoczny, to pokazujemy loaderBox
                         loaderBox.classList.remove("loader-box-hide");
                         loaderBox.classList.add("loader-box-show");
-
-                        // Rozpocznij śledzenie kursora
-                        document.addEventListener("mousemove", followCursor);
                     } else {
-                        console.warn("Brak elementów do wyświetlenia (checkOverlay, floatingWrapper, loaderBox).");
+                        // Jeśli iframe nie jest widoczny, nie pokazujemy loaderBox
+                        loaderBox.style.display = 'none';
                     }
 
-                    // Po 2 sekundach wyślij wiadomość do iframe
-                    setTimeout(() => {
-                        if (targetIframe && targetIframe.contentWindow && iframeOrigin) {
-                            targetIframe.contentWindow.postMessage(
-                                { typ: 'klikniecie', dane: 'task-completed' },
-                                iframeOrigin
-                            );
-                            console.log('Wysłano wiadomość do iframe (po 1s):', { typ: 'klikniecie', dane: 'task-completed' });
-                        } else {
-                            console.log('Nie znaleziono docelowego iframe lub brak origin.');
-                        }
-                    }, 1000);
+                    // Rozpocznij śledzenie kursora
+                    document.addEventListener("mousemove", followCursor);
                 } else {
-                    console.log('Kliknięto element inny niż task-completed:', event.target);
+                    console.warn("Brak elementów do wyświetlenia (checkOverlay, floatingWrapper, loaderBox, iframeContainer).");
                 }
-            },
-            { passive: false }
-        );
 
-        console.log('Nasłuchiwacz na kliknięcia został dodany.');
-    }
+                // Po 2 sekundach wyślij wiadomość do iframe (niezależnie od widoczności loaderBox)
+                setTimeout(() => {
+                    if (targetIframe && targetIframe.contentWindow && iframeOrigin) {
+                        targetIframe.contentWindow.postMessage(
+                            { typ: 'klikniecie', dane: 'task-completed' },
+                            iframeOrigin
+                        );
+                        console.log('Wysłano wiadomość do iframe (po 1s):', { typ: 'klikniecie', dane: 'task-completed' });
+                    } else {
+                        console.log('Nie znaleziono docelowego iframe lub brak origin.');
+                    }
+                }, 1000);
+            } else {
+                console.log('Kliknięto element inny niż task-completed:', event.target);
+            }
+        },
+        { passive: false }
+    );
+
+    console.log('Nasłuchiwacz na kliknięcia został dodany.');
+}
 
     function setupMessageListener() {
         console.log('Dodawanie nasłuchiwacza wiadomości od iframe.');
