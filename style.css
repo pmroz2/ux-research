@@ -16,26 +16,27 @@ html, body {
     height: 100%;
     background-color: rgba(0, 0, 0, 0.90);
     z-index: 1000;
-    display: block; /* domyślnie widoczny */
-    opacity: 1;     /* pełna widoczność */
-    transition: opacity 200ms ease; /* Animacja fade */
-    backdrop-filter: blur(5px);
+    backdrop-filter: blur(5px); 
     -webkit-backdrop-filter: blur(5px);
-    pointer-events: auto;
 }
 
-/* Klasa do chowania */
-.background-overlay.hidden {
+/* Klasy fade */
+.fade {
+    transition: opacity 200ms ease;
+    opacity: 1;
+    display: block; /* Domyślnie block, ukrywany będzie w JS po transitionend */
+}
+
+.fade-visible {
+    opacity: 1;
+}
+
+.fade-hidden {
     opacity: 0;
-    pointer-events: none;
+    pointer-events: none; 
 }
 
-
-.background-overlay.show {
-    opacity: 1; /* po dodaniu klasy show, fade-in */
-    pointer-events: auto;
-}
-
+/* Iframe Container */
 .iframe-container {
     position: fixed;
     top: 0;
@@ -49,7 +50,7 @@ html, body {
 }
 
 .iframe-container.hidden {
-    transform: translateX(-450px); /* Ukrycie kontenera */
+    transform: translateX(-450px);
 }
 
 .iframe {
@@ -71,7 +72,7 @@ html, body {
     justify-content: center;
     cursor: pointer;
     opacity: 1;
-    transition: opacity 200ms ease; /* Dodana animacja fade */
+    transition: opacity 200ms ease;
 }
 
 .iframe-arrow.hidden-fade {
@@ -107,7 +108,7 @@ html, body {
     display: flex;
     flex-direction: row;
     align-items: flex-start;
-    max-width: 500px; /* Maksymalna szerokość dla content-box */
+    max-width: 500px; 
 }
 
 .left-column {
@@ -116,7 +117,7 @@ html, body {
 }
 
 .left-column img {
-    width: 100%; /* Obraz w kolumnie */
+    width: 100%; 
     height: auto;
     display: block;
 }
@@ -140,7 +141,7 @@ html, body {
     color: white;
     margin: 0 0 20px 0;
     font-size: 16px;
-    text-align: center; /* Wyśrodkowanie tekstu w paragrafach */
+    text-align: center;
 }
 
 .right-column button {
@@ -164,7 +165,7 @@ html, body {
     height: 50px;
     margin-bottom: 10px;
     display: block;
-    align-self: center; /* Wyśrodkowanie obrazu */
+    align-self: center;
 }
 
 @keyframes shake {
@@ -198,23 +199,23 @@ html, body {
   display: flex;
   justify-content: left;
   align-items: center;
-  z-index: 9999; /* Najwyższy możliwy z-index */
+  z-index: 9999; 
 }
 
 #floatingWrapper {
-  width: 90px; /* 80px (element) + 10px */
-  height: 90px; /* 80px (element) + 10px */
-  background: #35D685; /* Gradient tła */
-  border-radius: 50%; /* Zaokrąglone rogi */
+  width: 90px;
+  height: 90px;
+  background: #35D685;
+  border-radius: 50%;
   position: absolute;
   top: 0;
   left: 0;
-  display: none; /* Pojawia się dynamicznie */
-  overflow: hidden; /* Ukrycie nadmiarowej zawartości */
+  display: none;
+  overflow: hidden;
   display: flex;
-  align-items: center; /* Wyśrodkowanie zawartości pionowo */
-  justify-content: center; /* Wyśrodkowanie zawartości poziomo */
-  transform: translate(-50%, -50%) scale(0.75); /* Uwzględniono skalowanie */
+  align-items: center;
+  justify-content: center;
+  transform: translate(-50%, -50%) scale(0.75);
   pointer-events: none;
   border: 4px solid #35D685;
   box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.25);
@@ -377,7 +378,7 @@ html, body {
   }
 }
 
-/* Animacje */
+/* Efekty pojawiania się i znikania floatingWrapper */
 @keyframes scale-in {
   0% {
     transform: translate(-50%, -50%) scale(0);
@@ -418,7 +419,7 @@ html, body {
   animation: scale-out 200ms ease-out forwards;
 }
 
-/* Poprawiona definicja #loaderBox */
+/* loaderBox */
 #loaderBox {
   width: 450px;
   height: 100%;
@@ -426,23 +427,18 @@ html, body {
   display: flex;
   justify-content: center;
   align-items: center;
-  transition: opacity 200ms ease-in-out; /* Przejście dla zmiany przezroczystości */
+  transition: opacity 200ms ease-in-out;
 }
 
-/* Klasa do pokazania loaderBox */
 .loader-box-show {
   opacity: 1;
-  /* Transition jest już zdefiniowany w #loaderBox */
 }
 
-/* Klasa do ukrycia loaderBox */
 .loader-box-hide {
   opacity: 0;
-  /* Transition jest już zdefiniowany w #loaderBox */
 }
 
 #loaderBox img {
   max-width: 25%;
   max-height: 25%;
 }
-
