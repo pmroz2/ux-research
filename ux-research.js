@@ -177,13 +177,16 @@
         const backgroundOverlayStart = document.createElement('div');
         backgroundOverlayStart.id = 'background-overlay-start';
         backgroundOverlayStart.className = 'background-overlay';
+        // Domyślnie ukryty (ustawione w CSS display:none nie jest konieczne, bo można i tak zarządzać)
+        backgroundOverlayStart.style.display = 'none';
         body.appendChild(backgroundOverlayStart);
 
         const backgroundOverlayFeedback = document.createElement('div');
         backgroundOverlayFeedback.id = 'background-overlay-feedback';
         backgroundOverlayFeedback.className = 'background-overlay';
-        backgroundOverlayFeedback.hidden = true;
-
+        // Domyślnie ukryty
+        backgroundOverlayFeedback.style.display = 'none'; // startowo niewidoczny
+        // Nie dodajemy hidden, używamy klas .show do pokazywania
         const feedbackContentBox = document.createElement('div');
         feedbackContentBox.className = 'content-box';
 
@@ -272,6 +275,29 @@
         console.log('Struktury HTML zostały dodane do dokumentu.');
     }
 
+    function showOverlay(overlay) {
+        // Funkcja do pokazania overlay z animacją
+        if (!overlay) return;
+        overlay.style.display = 'block';
+        requestAnimationFrame(() => {
+            overlay.classList.add('show');
+        });
+    }
+
+    function hideOverlay(overlay) {
+        // Funkcja do chowania overlay z animacją
+        if (!overlay) return;
+        overlay.classList.remove('show');
+        // Po zakończeniu transition ustaw display:none
+        const onTransitionEnd = function() {
+            overlay.removeEventListener('transitionend', onTransitionEnd);
+            if (!overlay.classList.contains('show')) {
+                overlay.style.display = 'none';
+            }
+        };
+        overlay.addEventListener('transitionend', onTransitionEnd);
+    }
+
     function setupAdditionalEventListeners() {
         console.log('Konfiguracja dodatkowych nasłuchiwaczy.');
 
@@ -309,7 +335,8 @@
         startButton.addEventListener('click', () => {
             console.log('Kliknięto startButton.');
             topOverlay.style.display = 'none';
-            backgroundOverlayStart.setAttribute('hidden', '');
+            // backgroundOverlayStart - chowamy jeśli jest widoczny
+            hideOverlay(backgroundOverlayStart);
             if (targetIframe && targetIframe.contentWindow && iframeOrigin) {
                 const message = { typ: 'startButtonClicked', dane: 'start-button' };
                 targetIframe.contentWindow.postMessage(message, iframeOrigin);
@@ -345,33 +372,31 @@
             }
         });
 
-        // Observowanie background-overlay-feedback pod kątem hidden
-        function handleBackgroundOverlayFeedbackChange(mutationsList) {
-            for (const mutation of mutationsList) {
-                if (mutation.type === 'attributes' && mutation.attributeName === 'hidden') {
-                    const isHidden = backgroundOverlayFeedback.hasAttribute('hidden');
-                    console.log(`background-overlay-feedback atrybut 'hidden' zmieniony na: ${isHidden}`);
-                    if (!isHidden) {
-                        hideIframeArrow();
-                        console.log('background-overlay-feedback stało się widoczne, ukryto iframe-arrow.');
-                        const isIframeHidden = iframeContainer.classList.contains('hidden') || iframeContainer.getAttribute('data-visible') === 'false';
-                        console.log(`Czy iframeContainer jest ukryty? ${isIframeHidden}`);
-                        if (isIframeHidden) {
-                            setTimeout(() => {
-                                console.log('Wywołano kliknięcie na iframe-arrow z setTimeout.');
-                                iframeArrow.click();
-                            }, 200);
-                        }
-                    } else {
-                        showIframeArrow();
-                        console.log('background-overlay-feedback zostało ukryte, pokazano iframe-arrow.');
-                    }
-                }
-            }
-        }
+        // Observowanie background-overlay-feedback bez atrybutu hidden
+        // Teraz nie obserwujemy atrybutów hidden - nie jest to już potrzebne,
+        // ponieważ stosujemy klasy. Jeśli potrzebujesz reakcji na show/hide,
+        // można to zrobić bezpośrednio w miejscach, w których zmieniane są klasy.
+        // Poniższy kod był wcześniej użyty do obserwacji hidden - usuwamy go.
 
-        const observer = new MutationObserver(handleBackgroundOverlayFeedbackChange);
-        observer.observe(backgroundOverlayFeedback, { attributes: true });
+        // Jeśli chcesz reakcję na pojawianie się i znikanie feedback overlay:
+        backgroundOverlayFeedback.addEventListener('transitionend', () => {
+            const isShown = backgroundOverlayFeedback.classList.contains('show');
+            console.log(`background-overlay-feedback jest teraz ${isShown ? 'widoczny' : 'niewidoczny'}.`);
+            if (isShown) {
+                // Pojawienie - hide iframe arrow
+                hideIframeArrow();
+                const iframeContainerIsHidden = iframeContainer.classList.contains('hidden') || iframeContainer.getAttribute('data-visible') === 'false';
+                if (iframeContainerIsHidden) {
+                    setTimeout(() => {
+                        console.log('Wywołano kliknięcie na iframe-arrow z setTimeout.');
+                        iframeArrow.click();
+                    }, 200);
+                }
+            } else {
+                // Ukrycie - show iframe arrow
+                showIframeArrow();
+            }
+        });
     }
 
     function getURLParameter(name) {
@@ -422,73 +447,73 @@
     }
 
     function setupClickListener() {
-    console.log('Nasłuchiwanie na kliknięcia...');
-    document.addEventListener(
-        'click',
-        function(event) {
-            console.log('Wykryto kliknięcie:', event.target);
-            var taskElement = event.target.closest('[data-label="task-completed"]');
+        console.log('Nasłuchiwanie na kliknięcia...');
+        document.addEventListener(
+            'click',
+            function(event) {
+                console.log('Wykryto kliknięcie:', event.target);
+                var taskElement = event.target.closest('[data-label="task-completed"]');
 
-            if (taskElement) {
-                console.log('Kliknięto element z data-label="task-completed":', taskElement);
+                if (taskElement) {
+                    console.log('Kliknięto element z data-label="task-completed":', taskElement);
 
-                const checkOverlay = document.getElementById("checkOverlay");
-                const floatingWrapper = document.getElementById("floatingWrapper");
-                const loaderBox = document.getElementById("loaderBox");
-                const iframeContainer = document.getElementById('iframe-container');
+                    const checkOverlay = document.getElementById("checkOverlay");
+                    const floatingWrapper = document.getElementById("floatingWrapper");
+                    const loaderBox = document.getElementById("loaderBox");
+                    const iframeContainer = document.getElementById('iframe-container');
 
-                if (checkOverlay && floatingWrapper && loaderBox && iframeContainer) {
-                    // Wyświetl checkOverlay
-                    checkOverlay.style.display = "flex";
+                    if (checkOverlay && floatingWrapper && loaderBox && iframeContainer) {
+                        // Wyświetl checkOverlay
+                        checkOverlay.style.display = "flex";
 
-                    // Pozycjonowanie wrappera względem aktualnego kliknięcia
-                    positionWrapper(event.clientX, event.clientY);
+                        // Pozycjonowanie wrappera względem aktualnego kliknięcia
+                        positionWrapper(event.clientX, event.clientY);
 
-                    // Pokaż floatingWrapper z animacją
-                    floatingWrapper.classList.remove("floating-wrapper-hide");
-                    floatingWrapper.style.display = "flex";
-                    floatingWrapper.classList.add("floating-wrapper-show");
+                        // Pokaż floatingWrapper z animacją
+                        floatingWrapper.classList.remove("floating-wrapper-hide");
+                        floatingWrapper.style.display = "flex";
+                        floatingWrapper.classList.add("floating-wrapper-show");
 
-                    // Sprawdź widoczność iframeContainer
-                    const isIframeVisible = iframeContainer.getAttribute('data-visible') === 'true';
+                        // Sprawdź widoczność iframeContainer
+                        const isIframeVisible = iframeContainer.getAttribute('data-visible') === 'true';
 
-                    if (isIframeVisible) {
-                        // Jeśli iframe jest widoczny, to pokazujemy loaderBox
-                        loaderBox.classList.remove("loader-box-hide");
-                        loaderBox.classList.add("loader-box-show");
+                        if (isIframeVisible) {
+                            // Jeśli iframe jest widoczny, to pokazujemy loaderBox
+                            loaderBox.classList.remove("loader-box-hide");
+                            loaderBox.classList.add("loader-box-show");
+                        } else {
+                            // Jeśli iframe nie jest widoczny, ukrywamy loaderBox poprzez klasy
+                            loaderBox.classList.remove("loader-box-show");
+                            loaderBox.classList.add("loader-box-hide");
+                        }
+
+                        // Rozpocznij śledzenie kursora
+                        document.addEventListener("mousemove", followCursor);
                     } else {
-                        // Jeśli iframe nie jest widoczny, ukrywamy loaderBox poprzez klasy
-                        loaderBox.classList.remove("loader-box-show");
-                        loaderBox.classList.add("loader-box-hide");
+                        console.warn("Brak elementów do wyświetlenia (checkOverlay, floatingWrapper, loaderBox, iframeContainer).");
                     }
 
-                    // Rozpocznij śledzenie kursora
-                    document.addEventListener("mousemove", followCursor);
+                    // Po 2 sekundach wyślij wiadomość do iframe (niezależnie od widoczności loaderBox)
+                    setTimeout(() => {
+                        if (targetIframe && targetIframe.contentWindow && iframeOrigin) {
+                            targetIframe.contentWindow.postMessage(
+                                { typ: 'klikniecie', dane: 'task-completed' },
+                                iframeOrigin
+                            );
+                            console.log('Wysłano wiadomość do iframe (po 1s):', { typ: 'klikniecie', dane: 'task-completed' });
+                        } else {
+                            console.log('Nie znaleziono docelowego iframe lub brak origin.');
+                        }
+                    }, 1000);
                 } else {
-                    console.warn("Brak elementów do wyświetlenia (checkOverlay, floatingWrapper, loaderBox, iframeContainer).");
+                    console.log('Kliknięto element inny niż task-completed:', event.target);
                 }
+            },
+            { passive: false }
+        );
 
-                // Po 2 sekundach wyślij wiadomość do iframe (niezależnie od widoczności loaderBox)
-                setTimeout(() => {
-                    if (targetIframe && targetIframe.contentWindow && iframeOrigin) {
-                        targetIframe.contentWindow.postMessage(
-                            { typ: 'klikniecie', dane: 'task-completed' },
-                            iframeOrigin
-                        );
-                        console.log('Wysłano wiadomość do iframe (po 1s):', { typ: 'klikniecie', dane: 'task-completed' });
-                    } else {
-                        console.log('Nie znaleziono docelowego iframe lub brak origin.');
-                    }
-                }, 1000);
-            } else {
-                console.log('Kliknięto element inny niż task-completed:', event.target);
-            }
-        },
-        { passive: false }
-    );
-
-    console.log('Nasłuchiwacz na kliknięcia został dodany.');
-}
+        console.log('Nasłuchiwacz na kliknięcia został dodany.');
+    }
 
     function setupMessageListener() {
         console.log('Dodawanie nasłuchiwacza wiadomości od iframe.');
@@ -504,17 +529,19 @@
             }
 
             console.log('Wiadomość pochodzi z zaufanego origin.');
+            const backgroundOverlayFeedback = document.getElementById('background-overlay-feedback');
+            const checkOverlay = document.getElementById("checkOverlay");
+            const floatingWrapper = document.getElementById("floatingWrapper");
+            const loaderBox = document.getElementById("loaderBox");
 
             if (event.data.typ === 'nextButton') {
                 console.log('Otrzymano wiadomość typu "nextButton"');
-                const backgroundOverlayFeedback = document.getElementById('background-overlay-feedback');
                 if (backgroundOverlayFeedback) {
-                    console.log('Stan przed zmianą atrybutu "hidden":', backgroundOverlayFeedback.hasAttribute('hidden'));
-                    if (!backgroundOverlayFeedback.hasAttribute('hidden')) {
-                        backgroundOverlayFeedback.setAttribute('hidden', '');
-                        console.log('Dodano atrybut "hidden" do #background-overlay-feedback.');
+                    // Jeśli widoczny - schowaj
+                    if (backgroundOverlayFeedback.classList.contains('show')) {
+                        hideOverlay(backgroundOverlayFeedback);
                     } else {
-                        console.log('#background-overlay-feedback już posiada atrybut "hidden".');
+                        console.log('#background-overlay-feedback jest już ukryty.');
                     }
                 } else {
                     console.warn('Nie znaleziono elementu #background-overlay-feedback.');
@@ -525,11 +552,6 @@
                 // Dodanie opóźnienia 2 sekund przed wykonaniem istniejącej logiki
                 setTimeout(() => {
                     // Ukrywanie elementów analogicznie do kliknięcia w "hideDivButton" w skrypcie nr 2
-                    const checkOverlay = document.getElementById("checkOverlay");
-                    const floatingWrapper = document.getElementById("floatingWrapper");
-                    const loaderBox = document.getElementById("loaderBox");
-                    const backgroundOverlayFeedback = document.getElementById('background-overlay-feedback');
-
                     if (checkOverlay && floatingWrapper && loaderBox) {
                         // Ukrywanie floatingWrapper
                         floatingWrapper.classList.remove("floating-wrapper-show");
@@ -548,10 +570,10 @@
                             // Zatrzymaj śledzenie kursora
                             document.removeEventListener("mousemove", followCursor);
 
-                            // Teraz usuwamy hidden z background-overlay-feedback
+                            // Teraz pokazujemy background-overlay-feedback
                             if (backgroundOverlayFeedback) {
-                                backgroundOverlayFeedback.removeAttribute('hidden');
-                                console.log('Usunięto atrybut "hidden" z #background-overlay-feedback po ukryciu elementów.');
+                                showOverlay(backgroundOverlayFeedback);
+                                console.log('Pokazano #background-overlay-feedback po ukryciu elementów.');
                             }
                         }, 200);
                     } else {
