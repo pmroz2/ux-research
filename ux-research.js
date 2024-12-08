@@ -534,6 +534,27 @@
                         console.warn("Brak niezbędnych elementów do ukrycia (checkOverlay, floatingWrapper, loaderBox).");
                     }
                 }, 2000);
+            } else if (event.data.typ === 'pageLoaded') {
+                console.log('Otrzymano wiadomość typu "pageLoaded"');
+
+                // Odczekaj 1 sekundę
+                setTimeout(() => {
+                    const initialLoader = document.getElementById('initial-loader');
+                    if (initialLoader) {
+                        console.log('Znaleziono element #initial-loader. Rozpoczynanie animacji ukrywania.');
+                        // Zmień opacity na 0
+                        initialLoader.style.opacity = '0';
+                        console.log('Ustawiono opacity na 0 dla #initial-loader.');
+
+                        // Po 200ms zmień display na none
+                        setTimeout(() => {
+                            initialLoader.style.display = 'none';
+                            console.log('Ustawiono display na "none" dla #initial-loader.');
+                        }, 200);
+                    } else {
+                        console.warn('Nie znaleziono elementu o id "initial-loader".');
+                    }
+                }, 1000);
             } else {
                 console.log('Otrzymano wiadomość innego typu:', event.data.typ);
             }
@@ -557,7 +578,6 @@
         setupClickListener();
         setupMessageListener();
         console.log('Skrypt został zainicjalizowany.');
-
     }
 
 })();
