@@ -558,24 +558,6 @@
         setupMessageListener();
         console.log('Skrypt został zainicjalizowany.');
 
-        // --- Dodana logika na końcu skryptu ---
-        setTimeout(() => {
-            const initialLoader = document.getElementById('initial-loader');
-            if (initialLoader) {
-                console.log('Rozpoczynanie animacji ukrywania initial-loader.');
-                initialLoader.style.opacity = '0';
-
-                // Po zakończeniu przejścia opacity, ustaw display: none
-                initialLoader.addEventListener('transitionend', () => {
-                    initialLoader.style.display = 'none';
-                    console.log('initial-loader został ukryty.');
-                }, { once: true });
-            } else {
-                console.warn('Nie znaleziono elementu o id "initial-loader".');
-            }
-        }, 1000);
-        // --- Koniec dodanej logiki ---
-
     }
 
 })();
