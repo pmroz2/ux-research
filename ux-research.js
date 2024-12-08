@@ -558,6 +558,13 @@
     function initializeScript() {
         console.log('Inicjalizacja skryptu.');
         createHTMLStructures();
+
+        // Początkowo ukryj checkOverlay (tak jak w skrypcie nr 2)
+        const checkOverlay = document.getElementById('checkOverlay');
+        if (checkOverlay) {
+            checkOverlay.style.display = "none";
+        }
+
         scaleBaseElement();
         setupAdditionalEventListeners();
         manipulateIframes();
