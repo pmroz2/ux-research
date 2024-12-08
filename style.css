@@ -16,12 +16,20 @@ html, body {
     height: 100%;
     background-color: rgba(0, 0, 0, 0.90);
     z-index: 1000;
-    opacity: 0; /* początkowo niewidoczny */
+    display: block; /* domyślnie widoczny */
+    opacity: 1;     /* pełna widoczność */
     transition: opacity 200ms ease; /* Animacja fade */
     backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);
-    pointer-events: none; /* Wyłączenie interakcji, gdy niewidoczne */
+    pointer-events: auto;
 }
+
+/* Klasa do chowania */
+.background-overlay.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
 
 .background-overlay.show {
     opacity: 1; /* po dodaniu klasy show, fade-in */
