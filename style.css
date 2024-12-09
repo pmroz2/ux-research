@@ -25,9 +25,23 @@ html, body {
     height: 100%;
     background-color: rgba(0, 17, 27, 0.95);
     z-index: 1000;
-    backdrop-filter: blur(15px); 
-    -webkit-backdrop-filter: blur(15px);
+    backdrop-filter: blur(15px) grayscale(100%); /* Rozmycie i wyszarzenie */
+    -webkit-backdrop-filter: blur(15px) grayscale(100%); /* Dla Safari */
 }
+
+.background-overlay::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, rgba(255, 0, 0, 0.5), rgba(0, 0, 255, 0.5)); /* Gradient */
+    mix-blend-mode: color; /* Nałożenie koloru z gradientu */
+    pointer-events: none; /* Nie blokuje kliknięć */
+    z-index: 1;
+}
+
 
 /* Klasy fade */
 .fade {
