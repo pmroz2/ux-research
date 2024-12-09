@@ -17,7 +17,7 @@ html, body {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.90);
+    background-color: rgba(0, 17, 27, 0.95);
     z-index: 1000;
     backdrop-filter: blur(5px); 
     -webkit-backdrop-filter: blur(5px);
@@ -107,7 +107,7 @@ html, body {
 }
 
 .content-box {
-    margin: 130px 0 0 550px;
+    margin: 160px 0 0 510px;
     display: flex;
     flex-direction: row;
     align-items: flex-start;
@@ -127,7 +127,6 @@ html, body {
 
 .right-column {
     flex-grow: 1;
-    padding-left: 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -137,11 +136,12 @@ html, body {
 .right-column h4 {
     color: white;
     margin-bottom: 10px;
-    font-size: 18px;
+    font-size: 22px;
     text-decoration: underline;
     text-decoration-color: #c2fbd7;
     text-decoration-thickness: 2px;
     text-underline-offset: 6px;
+    letter-spacing: 1px;
 }
 
 .right-column p {
@@ -151,6 +151,8 @@ html, body {
     line-height: 170%;
     margin-top: 12px;
     margin-bottom: 30px;
+    letter-spacing: 0.5px;
+
 }
 
 .right-column button {
@@ -163,6 +165,7 @@ html, body {
     border-radius: 50px;
     cursor: pointer;
     text-align: center;
+    letter-spacing: 0.5px;
 }
 
 .right-column button:hover {
