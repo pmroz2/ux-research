@@ -27,7 +27,7 @@ html, body {
     z-index: 1000;
     backdrop-filter: blur(15px) grayscale(100%); /* Rozmycie i wyszarzanie tła */
     -webkit-backdrop-filter: blur(15px) grayscale(100%); /* Dla Safari */
-    background: linear-gradient(to bottom right, rgba(48, 57, 73, 0.95), rgba(50, 66, 95, 0.9));
+    background: linear-gradient(to bottom right, rgba(23, 68, 67, 95), rgba(23, 69, 67, 0.85));
 }
 
 
@@ -78,7 +78,8 @@ html, body {
     right: -60px;
     width: 60px;
     height: 60px;
-    background-color: #FA7307;
+    /*background-color: #FA7307;*/
+    background-color: #fb811f;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -463,10 +464,10 @@ html, body {
 
 #start-button {
 
-  background: linear-gradient(to top, rgba(174, 186, 220, 1), rgba(250, 250, 252, 1));
+  background: linear-gradient(to top, rgba(217, 253, 185, 1), rgba(243, 255, 231, 1));
   border-radius: 100px;
   /* box-shadow: rgba(44, 187, 99, .2) 0 -25px 18px -14px inset,rgba(44, 187, 99, .15) 0 1px 2px,rgba(44, 187, 99, .15) 0 2px 4px,rgba(44, 187, 99, .15) 0 4px 8px,rgba(44, 187, 99, .15) 0 8px 16px,rgba(44, 187, 99, .15) 0 16px 32px; */
-  color: #303949;
+  color: #144241;
   cursor: pointer;
   display: inline-block;
   font-family: "Lexend", sans-serif;
@@ -479,7 +480,7 @@ html, body {
   user-select: none;
   -webkit-user-select: none;
   touch-action: manipulation;
-  border-radius: 50px; 
+  border-radius: 10px; 
   letter-spacing: 0.5px;
   height: 40px;
 
