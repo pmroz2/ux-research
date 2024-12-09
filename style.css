@@ -26,7 +26,7 @@ html, body {
     z-index: 1000;
     backdrop-filter: blur(15px) grayscale(100%); /* Rozmycie i wyszarzanie tła */
     -webkit-backdrop-filter: blur(15px) grayscale(100%); /* Dla Safari */
-    background: linear-gradient(45deg, rgba(255, 0, 0, 0.5), rgba(0, 0, 255, 0.5)); /* Gradient bez mieszania */
+    background: linear-gradient(to bottom right, rgba(48, 57, 73, 0.95), rgba(50, 66, 95, 0.9));
 }
 
 
@@ -472,10 +472,10 @@ html, body {
 }
 
 #start-button {
-  background-color: var(--primary-color);
+  background-color: linear-gradient(to top, rgba(174, 186, 220, 1), rgba(250, 250, 252, 1));
   border-radius: 100px;
   /* box-shadow: rgba(44, 187, 99, .2) 0 -25px 18px -14px inset,rgba(44, 187, 99, .15) 0 1px 2px,rgba(44, 187, 99, .15) 0 2px 4px,rgba(44, 187, 99, .15) 0 4px 8px,rgba(44, 187, 99, .15) 0 8px 16px,rgba(44, 187, 99, .15) 0 16px 32px; */
-  color: white;
+  color: #303949;
   cursor: pointer;
   display: inline-block;
   font-family: "Lexend", sans-serif;
