@@ -148,10 +148,10 @@ html, body {
     color: white;
     margin-bottom: 10px;
     font-size: 22px;
-    text-decoration: underline;
+ /*   text-decoration: underline;
     text-decoration-color: var(--secondary-color);
     text-decoration-thickness: 2px;
-    text-underline-offset: 6px;
+    text-underline-offset: 6px; */
     letter-spacing: 1px;
 }
 
