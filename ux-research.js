@@ -255,7 +255,7 @@
         headerText.textContent = 'Pamiętaj';
 
         const paragraph = document.createElement('p');
-        paragraph.textContent = 'Panel z treścią zadania można schować w razie potrzeby.';
+        paragraph.textContent = 'Panel z treścią zadania możesz schować w razie potrzeby.';
 
         const startButton = document.createElement('button');
         startButton.id = 'start-button';
