@@ -1,5 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap');
 
+:root {
+    --primary-color: #3498db;
+    --secondary-color: #2ecc71;
+}
+
+
 * {
     margin: 0;
     padding: 0;
@@ -19,8 +25,8 @@ html, body {
     height: 100%;
     background-color: rgba(0, 17, 27, 0.95);
     z-index: 1000;
-    backdrop-filter: blur(5px); 
-    -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(15px); 
+    -webkit-backdrop-filter: blur(15px);
 }
 
 /* Klasy fade */
@@ -117,6 +123,8 @@ html, body {
 .left-column {
     width: 80px;
     flex-shrink: 0;
+    margin-top: 5px;
+
 }
 
 .left-column img {
@@ -127,6 +135,7 @@ html, body {
 
 .right-column {
     flex-grow: 1;
+    padding-left: 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -138,7 +147,7 @@ html, body {
     margin-bottom: 10px;
     font-size: 22px;
     text-decoration: underline;
-    text-decoration-color: #c2fbd7;
+    text-decoration-color: var(--primary-color);
     text-decoration-thickness: 2px;
     text-underline-offset: 6px;
     letter-spacing: 1px;
@@ -148,8 +157,8 @@ html, body {
     color: white;
     font-size: 16px;
     text-align: center;
-    line-height: 170%;
-    margin-top: 12px;
+    line-height: 180%;
+    margin-top: 10px;
     margin-bottom: 30px;
     letter-spacing: 0.5px;
 
@@ -160,7 +169,7 @@ html, body {
     height: 40px;
     font-size: 16px;
     color: white;
-    background-color: #31B35E;
+    background-color: var(--primary-color);
     border: none;
     border-radius: 50px;
     cursor: pointer;
@@ -169,7 +178,7 @@ html, body {
 }
 
 .right-column button:hover {
-    background-color: #28a745;
+    background-color: var(--primary-color);
 }
 
 .feedback-icon {
@@ -461,10 +470,10 @@ html, body {
 }
 
 #start-button {
-  background-color: #c2fbd7;
+  background-color: var(--primary-color);
   border-radius: 100px;
   box-shadow: rgba(44, 187, 99, .2) 0 -25px 18px -14px inset,rgba(44, 187, 99, .15) 0 1px 2px,rgba(44, 187, 99, .15) 0 2px 4px,rgba(44, 187, 99, .15) 0 4px 8px,rgba(44, 187, 99, .15) 0 8px 16px,rgba(44, 187, 99, .15) 0 16px 32px;
-  color: green;
+  color: white;
   cursor: pointer;
   display: inline-block;
   font-family: "Lexend", sans-serif;
