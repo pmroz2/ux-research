@@ -252,14 +252,14 @@
         topRightColumn.className = 'right-column';
 
         const headerText = document.createElement('h4');
-        headerText.textContent = 'Header Text';
+        headerText.textContent = 'Pamiętaj';
 
         const paragraph = document.createElement('p');
-        paragraph.textContent = 'This is a paragraph inside the content box.';
+        paragraph.textContent = 'Panel z treścią zadania można schować w razie potrzeby.';
 
         const startButton = document.createElement('button');
         startButton.id = 'start-button';
-        startButton.textContent = 'Click Me';
+        startButton.textContent = 'Rozpocznij';
 
         topRightColumn.append(headerText, paragraph, startButton);
         topContentBox.append(topLeftColumn, topRightColumn);
