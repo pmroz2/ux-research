@@ -1,8 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap');
 
 :root {
-    --primary-color: #3498db;
-    --secondary-color: #2ecc71;
+    --primary-color: ##18b163;
+    --secondary-color: #3793FF;
 }
 
 
@@ -147,7 +147,7 @@ html, body {
     margin-bottom: 10px;
     font-size: 22px;
     text-decoration: underline;
-    text-decoration-color: var(--primary-color);
+    text-decoration-color: var(--secondary-color);
     text-decoration-thickness: 2px;
     text-underline-offset: 6px;
     letter-spacing: 1px;
