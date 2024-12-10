@@ -479,7 +479,7 @@ html, body {
   user-select: none;
   -webkit-user-select: none;
   touch-action: manipulation;
-  border-radius: 10px; 
+  border-radius: 100px; 
   letter-spacing: 0.5px;
   height: 40px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
