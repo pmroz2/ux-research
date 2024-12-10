@@ -255,7 +255,7 @@
         headerText.textContent = 'Warto wiedzieć';
 
         const paragraph = document.createElement('p');
-        paragraph.textContent = 'Na czas wykonywania zadania możesz schować wskazany panel.';
+        paragraph.textContent = 'Na czas wykonywania zadania możesz schować panel po lewej stronie.';
 
         const startButton = document.createElement('button');
         startButton.id = 'start-button';
