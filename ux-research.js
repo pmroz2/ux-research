@@ -199,10 +199,10 @@
 
         const feedbackAlert = document.createElement('h4');
         feedbackAlert.id = 'feedback-alert';
-        feedbackAlert.textContent = 'Feedback Alert';
+        feedbackAlert.textContent = 'Zadanie wykonane';
 
         const feedbackMessage = document.createElement('p');
-        feedbackMessage.textContent = 'This is the feedback message inside the content box.';
+        feedbackMessage.textContent = 'Chętnie poznamy Twoją opinię na jego temat.';
 
         feedbackRightColumn.append(feedbackIcon, feedbackAlert, feedbackMessage);
         feedbackContentBox.append(feedbackLeftColumn, feedbackRightColumn);
