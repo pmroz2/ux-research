@@ -252,10 +252,10 @@
         topRightColumn.className = 'right-column';
 
         const headerText = document.createElement('h4');
-        headerText.textContent = 'Pamiętaj';
+        headerText.textContent = 'Warto wiedzieć';
 
         const paragraph = document.createElement('p');
-        paragraph.textContent = 'Panel z treścią zadania możesz schować w razie potrzeby.';
+        paragraph.textContent = 'Po zapoznaniu się z zadaniem panel możesz schować na czas jego wykonywania.';
 
         const startButton = document.createElement('button');
         startButton.id = 'start-button';
