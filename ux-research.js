@@ -48,6 +48,10 @@
             console.log(`Szerokość okna (${currentWidth}px) jest mniejsza niż ${MIN_WIDTH}px.`);
 
             document.body.innerHTML = '';
+            // Dodatkowe style dla body
+            document.body.style.width = '100%';
+            document.body.style.backgroundColor = 'white';
+
             const body = document.querySelector('body');
             const alertContainer = document.createElement('div');
             alertContainer.className = 'window-size-alert-container';
