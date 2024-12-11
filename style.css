@@ -118,7 +118,7 @@ html, body {
 }
 
 .content-box {
-    margin: 160px 0 0 510px;
+    margin: 160px 0 0 490px;
     display: flex;
     flex-direction: row;
     align-items: flex-start;
