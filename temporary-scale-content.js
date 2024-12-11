@@ -154,7 +154,7 @@
         topLeftColumn.className = 'left-column';
 
         const dashedArrow = document.createElement('img');
-        dashedArrow.src = 'https://1236554drs4231112876vccf4-pawel.s3.eu-north-1.amazonaws.com/ux-research_dashed-start-arrow.svg';
+        dashedArrow.src = 'https://1236554drs4231112876vccf4-pawel.s3.eu-north-1.amazonaws.com/ux-research_dashed-home-arrow.svg';
         dashedArrow.alt = 'Dashed Arrow';
         topLeftColumn.appendChild(dashedArrow);
 
