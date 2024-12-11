@@ -28,8 +28,10 @@ html, body {
         no-repeat, /* SVG na pierwszym miejscu */
         linear-gradient(to bottom right, rgba(23, 68, 67, 0.95), rgba(23, 69, 67, 0.85)); /* Gradient na drugim miejscu */
     background-size: 600px 400px, cover; /* SVG: 600x400px, Gradient: pokrywa całość */
-    background-position: 50px 50px, center; /* SVG: przesunięcie o 50px w osi X i Y, Gradient: wyśrodkowany */
+    background-position: calc(100% + 50px) calc(100% + 50px), center; /* SVG: poza obszarem okna */
+    opacity: 1; /* Ustawione na pełną widoczność */
 }
+
 
 
 
