@@ -29,8 +29,8 @@ html, body {
         linear-gradient(to bottom right, rgba(23, 68, 67, 0.95), rgba(23, 69, 67, 0.85)); /* Gradient na drugim miejscu */
     background-size: 600px 400px, cover; /* SVG: 600x400px, Gradient: pokrywa całość */
     background-position: calc(100% + 50px) calc(100% + 50px), center; /* SVG: poza obszarem okna */
-    filter: opacity(0.5); /* Przezroczystość SVG */
 }
+
 
 
 
