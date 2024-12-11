@@ -185,7 +185,7 @@
         feedbackLeftColumn.className = 'left-column';
 
         const feedbackArrow = document.createElement('img');
-        feedbackArrow.src = 'https://1236554drs4231112876vccf4-pawel.s3.eu-north-1.amazonaws.com/ux-research_dashed-feedback-arrow.svg';
+        feedbackArrow.src = 'https://1236554drs4231112876vccf4-pawel.s3.eu-north-1.amazonaws.com/ux-research_dashed-task-completed-arrow.svg';
         feedbackArrow.alt = 'Feedback Arrow';
         feedbackLeftColumn.appendChild(feedbackArrow);
 
