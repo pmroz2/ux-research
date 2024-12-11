@@ -13,6 +13,7 @@ html, body {
     background-color: #e7e7e7;
 }
 
+
 .background-overlay {
     position: fixed;
     top: 0;
@@ -20,10 +21,17 @@ html, body {
     width: 100%;
     height: 100%;
     z-index: 1000;
-    backdrop-filter: blur(15px) grayscale(100%); /* Rozmycie i wyszarzanie tła */
-    -webkit-backdrop-filter: blur(15px) grayscale(100%); /* Dla Safari */
-    background: linear-gradient(to bottom right, rgba(23, 68, 67, 95), rgba(23, 69, 67, 0.85));
+    backdrop-filter: blur(15px) grayscale(100%);
+    -webkit-backdrop-filter: blur(15px) grayscale(100%);
+    background: 
+        url('https://1236554drs4231112876vccf4-pawel.s3.eu-north-1.amazonaws.com/ux-research_logo.svg') 
+        no-repeat, /* Ścieżka do SVG */
+        linear-gradient(to bottom right, rgba(23, 68, 67, 0.95), rgba(23, 69, 67, 0.85)); /* Gradient */
+    background-size: auto; /* SVG w swoich oryginalnych rozmiarach */
+    background-position: calc(100% + 50px) calc(100% + 50px); /* Pozycjonowanie SVG */
 }
+
+
 
 
 
