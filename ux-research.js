@@ -59,8 +59,7 @@
             alertContainer.appendChild(alertIcon);
 
             const alertText = document.createElement('p');
-            const difference = MIN_WIDTH - currentWidth;
-            alertText.textContent = `Rozdzielczość okna musi wynosić minimum 1280 px na szerokość. Zmień urządzenie na większe lub rozszerz to okno o ${difference}px.`;
+            alertText.textContent = `Minimalna szerokość okna to 1280 px (obecnie ${currentWidth}px). Powiększ okno lub zmień urządzenie na większe, aby kontynuować.`;
             alertText.className = 'window-size-alert-txt';
             alertContainer.appendChild(alertText);
 
@@ -343,7 +342,6 @@
             }
         });
 
-        // Funkcje pokazujące/ukrywające background-overlay-feedback
         function showFeedbackOverlay() {
             backgroundOverlayFeedback.style.display = 'block';
             requestAnimationFrame(() => {
@@ -351,11 +349,8 @@
                 backgroundOverlayFeedback.classList.add('fade-visible');
                 hideIframeArrow();
                 
-                // Sprawdzamy czy iframeContainer jest ukryte
                 const isIframeVisible = iframeContainer.getAttribute('data-visible') === 'true';
                 if (!isIframeVisible) {
-                    // Jeśli iframe jest ukryte, symulujemy kliknięcie w iframe-arrow,
-                    // tak jak robiliśmy to wcześniej gdy sprawdzaliśmy atrybut hidden.
                     setTimeout(() => {
                         console.log('Wywołano kliknięcie na iframe-arrow w ramach logiki showFeedbackOverlay.');
                         iframeArrow.click();
@@ -369,7 +364,6 @@
             backgroundOverlayFeedback.classList.add('fade-hidden');
         }
 
-        // Nasłuch na transitionend, aby po wygaszeniu (fade-out) schować element display:none
         backgroundOverlayFeedback.addEventListener('transitionend', (e) => {
             if (e.propertyName === 'opacity' && backgroundOverlayFeedback.classList.contains('fade-hidden')) {
                 backgroundOverlayFeedback.style.display = 'none';
@@ -377,7 +371,6 @@
             }
         });
 
-        // Udostępniamy globalnie do wykorzystania w setupMessageListener
         window.showFeedbackOverlay = showFeedbackOverlay;
         window.hideFeedbackOverlay = hideFeedbackOverlay;
     }
@@ -541,16 +534,12 @@
             } else if (event.data.typ === 'pageLoaded') {
                 console.log('Otrzymano wiadomość typu "pageLoaded"');
 
-                // Odczekaj 1 sekundę
                 setTimeout(() => {
                     const initialLoader = document.getElementById('initial-loader');
                     if (initialLoader) {
                         console.log('Znaleziono element #initial-loader. Rozpoczynanie animacji ukrywania.');
-                        // Zmień opacity na 0
                         initialLoader.style.opacity = '0';
                         console.log('Ustawiono opacity na 0 dla #initial-loader.');
-
-                        // Po 200ms zmień display na none
                         setTimeout(() => {
                             initialLoader.style.display = 'none';
                             console.log('Ustawiono display na "none" dla #initial-loader.');
@@ -559,9 +548,7 @@
                         console.warn('Nie znaleziono elementu o id "initial-loader".');
                     }
                 }, 1000);
-            } 
-            // Obsługa nowego typu wiadomości "flowFinished"
-            else if (event.data.typ === 'flowFinished') {
+            } else if (event.data.typ === 'flowFinished') {
                 console.log('Otrzymano wiadomość typu "flowFinished"');
                 const iframeContainers = document.querySelectorAll('.iframe-container');
                 iframeContainers.forEach(container => {
