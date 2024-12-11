@@ -126,14 +126,14 @@ html, body {
 }
 
 .left-column {
-    width: auto;
+    width: 100px;
     flex-shrink: 0;
     margin-top: 5px;
 
 }
 
 .left-column img {
-    width: auto; 
+    width: 100%; 
     height: auto;
     display: block;
 }
