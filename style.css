@@ -1,10 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap');
 
-:root {
-    --primary-color: #18b163;
-    --secondary-color: #3793FF;
-}
-
 
 * {
     margin: 0;
@@ -192,10 +187,19 @@ html, body {
 .shake {
     animation: shake 500ms ease-out;
 }
+.window-size-alert-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
 
 .window-size-alert-txt {
-    font-size: 1.2em;
-    color: #333;
+    font-size: 15pxm;
+    line-height: 180%;
+    color: #4f4f4f;
     margin-top: 20px;
 }
 
