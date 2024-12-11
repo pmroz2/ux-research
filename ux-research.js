@@ -194,7 +194,7 @@
 
         const feedbackIcon = document.createElement('img');
         feedbackIcon.className = 'feedback-icon';
-        feedbackIcon.src = 'https://1236554drs4231112876vccf4-pawel.s3.eu-north-1.amazonaws.com/ux-research_task-completed-icon.svg';
+        feedbackIcon.src = 'https://1236554drs4231112876vccf4-pawel.s3.eu-north-1.amazonaws.com/ux-research_check-icon.svg';
         feedbackIcon.alt = 'Task Completed Icon';
 
         const feedbackAlert = document.createElement('h4');
