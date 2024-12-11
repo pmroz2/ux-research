@@ -57,7 +57,7 @@
             alertContainer.className = 'window-size-alert-container';
 
             const alertIcon = document.createElement('img');
-            alertIcon.src = 'https://1236554drs4231112876vccf4-pawel.s3.eu-north-1.amazonaws.com/ux-research_window-size-alert-icon.svg';
+            alertIcon.src = 'https://1236554drs4231112876vccf4-pawel.s3.eu-north-1.amazonaws.com/ux-research_resize-icon.svg';
             alertIcon.alt = 'Alert Icon';
             alertIcon.className = 'window-size-alert-icon';
             alertContainer.appendChild(alertIcon);
