@@ -62,6 +62,12 @@
             alertIcon.className = 'window-size-alert-icon';
             alertContainer.appendChild(alertIcon);
 
+            // Dodawanie nowego nagłówka h2
+            const alertHeading = document.createElement('h2');
+            alertHeading.className = 'window-size-alert-h2';
+            alertHeading.textContent = 'Treść niedostępna';
+            alertContainer.appendChild(alertHeading);
+
             const alertText = document.createElement('p');
             alertText.textContent = `Minimalna szerokość okna to 1280 px (obecnie ${currentWidth}px). Powiększ okno lub zmień urządzenie na większe, aby kontynuować.`;
             alertText.className = 'window-size-alert-txt';
@@ -69,7 +75,7 @@
 
             body.appendChild(alertContainer);
 
-            console.log('Dodaj odpowiednie style do pliku CSS dla klas .window-size-alert-txt i .window-size-alert-icon.');
+            console.log('Dodaj odpowiednie style do pliku CSS dla klas .window-size-alert-txt, .window-size-alert-h2 i .window-size-alert-icon.');
         }
     }
 
