@@ -24,12 +24,13 @@ html, body {
     backdrop-filter: blur(15px) grayscale(100%);
     -webkit-backdrop-filter: blur(15px) grayscale(100%);
     background: 
-        linear-gradient(to bottom right, rgba(23, 68, 67, 0.95), rgba(23, 69, 67, 0.85)), /* Gradient */
         url('https://1236554drs4231112876vccf4-pawel.s3.eu-north-1.amazonaws.com/ux-research_logo.svg') 
-        no-repeat; /* SVG w osobnej warstwie */
-    background-size: cover, auto; /* Gradient: cover, SVG: auto */
-    background-position: center, calc(100% + 50px) calc(100% + 50px); /* Gradient: center, SVG: offset */
+        no-repeat, /* SVG na pierwszym miejscu */
+        linear-gradient(to bottom right, rgba(23, 68, 67, 0.95), rgba(23, 69, 67, 0.85)); /* Gradient na drugim miejscu */
+    background-size: 600px 400px, cover; /* SVG: 600x400px, Gradient: pokrywa całość */
+    background-position: 50px 50px, center; /* SVG: przesunięcie o 50px w osi X i Y, Gradient: wyśrodkowany */
 }
+
 
 
 
