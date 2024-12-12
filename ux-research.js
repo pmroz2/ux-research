@@ -565,6 +565,15 @@
                     container.style.width = '100%';
                     console.log('Zmieniono szerokość .iframe-container na 100% z animacją.');
                 });
+            } 
+            // Dodanie nowego nasłuchiwacza dla 'taskProblem'
+            else if (event.data.typ === 'taskProblem') {
+                console.log('Otrzymano wiadomość typu "taskProblem"');
+                const iframeContainers = document.querySelectorAll('.iframe-container');
+                iframeContainers.forEach(container => {
+                    container.style.width = '100%';
+                    console.log('Zmieniono szerokość .iframe-container na 100% z powodu taskProblem.');
+                });
             }
             else {
                 console.log('Otrzymano wiadomość innego typu:', event.data.typ);
