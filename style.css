@@ -57,7 +57,7 @@ html, body {
     height: 100%;
     background-color: white;
     z-index: 1010;
-    transition: transform 300ms ease-out, width 50ms ease-out;
+    transition: transform 300ms ease-out, width 0ms ease-out;
     box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
     padding: 0px 10px 0px 10px;
 }
