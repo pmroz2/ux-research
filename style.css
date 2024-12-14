@@ -7,6 +7,15 @@
     box-sizing: border-box;
 }
 
+*,
+*::before,
+*::after {
+  box-shadow: none !important;
+  outline: none !important; /* Wyłączenie outline dla focus */
+}
+
+
+
 html, body {
     height: 100%;
     font-family: "Lexend", sans-serif;
