@@ -239,7 +239,7 @@
         body.appendChild(iframeContainer);
 
         // Dodanie transition dla szerokości iframe-container
-        iframeContainer.style.transition = 'transform 300ms ease-out, width 500ms ease-in';
+        iframeContainer.style.transition = 'transform 300ms ease-out, width 400ms ease-out';
         console.log('Dodano transition dla szerokości iframe-container.');
 
         const topOverlay = document.createElement('div');
@@ -571,6 +571,29 @@
                 console.log('Otrzymano wiadomość typu "taskProblem"');
                 const iframeContainers = document.querySelectorAll('.iframe-container');
                 iframeContainers.forEach(container => {
+                    // Definiujemy funkcję obsługującą zakończenie animacji
+                    function handleTransitionEnd(e) {
+                        if (e.propertyName === 'width') { // Upewniamy się, że to zmiana szerokości
+                            console.log('Animacja zmiany szerokości zakończona dla', container);
+                            
+                            // Wysyłamy wiadomość 'hideLoader' do iframe
+                            if (targetIframe && targetIframe.contentWindow && iframeOrigin) {
+                                const message = { typ: 'hideLoader' };
+                                targetIframe.contentWindow.postMessage(message, iframeOrigin);
+                                console.log('Wysłano wiadomość do iframe:', message);
+                            } else {
+                                console.warn('Nie znaleziono docelowego iframe lub brak origin.');
+                            }
+
+                            // Usuwamy nasłuchiwacz, aby nie reagować na kolejne zdarzenia
+                            container.removeEventListener('transitionend', handleTransitionEnd);
+                        }
+                    }
+
+                    // Dodajemy nasłuchiwacz zdarzenia 'transitionend' z opcją 'once: true'
+                    container.addEventListener('transitionend', handleTransitionEnd, { once: true });
+
+                    // Ustawiamy szerokość na 100%, co wywoła animację
                     container.style.width = '100%';
                     console.log('Zmieniono szerokość .iframe-container na 100% z powodu taskProblem.');
                 });
