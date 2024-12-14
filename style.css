@@ -14,7 +14,9 @@
   outline: none !important; /* Wyłączenie outline dla focus */
 }
 
-
+.tally-linear-scale-option-selected {
+box-shadow: none !important;
+}
 
 html, body {
     height: 100%;
