@@ -9,14 +9,13 @@
 
 *,
 *::before,
-*::after {
+*::after,
+*:focus,
+*:focus-within {
   box-shadow: none !important;
-  outline: none !important; /* Wyłączenie outline dla focus */
+  outline: none !important;
 }
 
-.tally-linear-scale-option-selected {
-box-shadow: none !important;
-}
 
 html, body {
     height: 100%;
