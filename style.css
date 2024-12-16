@@ -251,6 +251,7 @@ h2::before {
     top: 0;
     left: 0;
     display: none;
+    overflow: hidden;
     align-items: center;
     justify-content: center;
     transform: translate(-50%, -50%) scale(0.75);
