@@ -65,7 +65,7 @@
             alertContainer.appendChild(alertHeading);
 
             const alertText = document.createElement('p');
-            alertText.textContent = `Minimalna szerokość okna to 1280 px (obecnie ${currentWidth}px). Powiększ okno lub zmień urządzenie na większe.`;
+            alertText.textContent = `Minimalna szerokość okna to 1280 px (obecnie ${currentWidth}px). Powiększ okno lub zmień urządzenie na większe, aby kontynuować.`;
             alertText.className = 'window-size-alert-txt';
             alertContainer.appendChild(alertText);
 
@@ -191,7 +191,7 @@
         feedbackAlert.textContent = 'Zadanie wykonane';
 
         const feedbackMessage = document.createElement('p');
-        feedbackMessage.textContent = 'Chętnie poznamy Twoją opinię.';
+        feedbackMessage.textContent = 'Chętnie poznamy Twoją opinię na jego temat.';
 
         feedbackRightColumn.append(feedbackIcon, feedbackAlert, feedbackMessage);
         feedbackContentBox.append(feedbackLeftColumn, feedbackRightColumn);
