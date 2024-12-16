@@ -1,11 +1,13 @@
 (function() {
+    // Funkcja główna, inicjuje skrypt
     console.log('Skrypt został załadowany i uruchomiony.');
 
     let targetIframe = null;
     let iframeOrigin = null;
 
+    // Funkcja ustawia pozycję "floatingWrapper" względem kursora
     function positionWrapper(x, y) {
-        const offset = 60; 
+        const offset = 60;
         const floatingWrapper = document.getElementById("floatingWrapper");
         if (floatingWrapper) {
             floatingWrapper.style.top = `${y - offset}px`;
@@ -13,42 +15,37 @@
         }
     }
 
+    // Funkcja śledzi położenie kursora i pozycjonuje "floatingWrapper"
     function followCursor(e) {
         positionWrapper(e.clientX, e.clientY);
     }
 
+    // Funkcja nasłuchuje na zmianę rozmiaru okna i odświeża stronę po 1s od ustabilizowania rozmiaru
     function setupResizeListener() {
         let resizeTimeout;
         window.addEventListener('resize', function() {
             if (resizeTimeout) {
                 clearTimeout(resizeTimeout);
-                console.log('Resetowanie timeoutu resize.');
             }
             resizeTimeout = setTimeout(() => {
-                console.log('Wykryto zmianę rozmiaru okna. Reloadowanie strony.');
+                console.log('Zmieniono rozmiar okna - przeładowanie strony.');
                 window.location.reload();
             }, 1000);
         });
-
-        console.log('Nasłuchiwacz resize z debouncingiem 1000 ms został dodany.');
     }
-
     setupResizeListener();
 
+    // Funkcja sprawdza minimalną szerokość okna i jeśli jest za mała, wyświetla komunikat
     function checkWindowWidth() {
         const MIN_WIDTH = 1280;
         const currentWidth = window.innerWidth;
 
-        console.log(`Sprawdzanie szerokości okna: ${currentWidth}px`);
-
         if (currentWidth >= MIN_WIDTH) {
-            console.log(`Szerokość okna (${currentWidth}px) jest większa lub równa ${MIN_WIDTH}px.`);
+            console.log(`Okno ma wystarczającą szerokość (${currentWidth}px) - kontynuuję inicjalizację.`);
             initializeScript();
         } else {
-            console.log(`Szerokość okna (${currentWidth}px) jest mniejsza niż ${MIN_WIDTH}px.`);
-
+            console.log(`Zbyt mała szerokość okna (${currentWidth}px) - wyświetlam komunikat dla użytkownika.`);
             document.body.innerHTML = '';
-            // Dodatkowe style dla body
             document.body.style.width = '100%';
             document.body.style.backgroundColor = 'white';
 
@@ -62,31 +59,26 @@
             alertIcon.className = 'window-size-alert-icon';
             alertContainer.appendChild(alertIcon);
 
-            // Dodawanie nowego nagłówka h2
             const alertHeading = document.createElement('h2');
             alertHeading.className = 'window-size-alert-h2';
             alertHeading.textContent = 'Treść niedostępna';
             alertContainer.appendChild(alertHeading);
 
             const alertText = document.createElement('p');
-            alertText.textContent = `Minimalna szerokość okna to 1280 px (obecnie ${currentWidth}px). Powiększ okno lub zmień urządzenie na większe, aby kontynuować.`;
+            alertText.textContent = `Minimalna szerokość okna to 1280 px (obecnie ${currentWidth}px). Powiększ okno lub zmień urządzenie na większe.`;
             alertText.className = 'window-size-alert-txt';
             alertContainer.appendChild(alertText);
 
             body.appendChild(alertContainer);
-
-            console.log('Dodaj odpowiednie style do pliku CSS dla klas .window-size-alert-txt, .window-size-alert-h2 i .window-size-alert-icon.');
         }
     }
-
     checkWindowWidth();
 
+    // Funkcja skaluje element #base jeżeli jest zbyt wysoki w stosunku do wysokości body
     function scaleBaseElement() {
-        let maxBottom = 0; 
-        let lowestElement = null; 
-
+        let maxBottom = 0;
+        let lowestElement = null;
         const elements = document.querySelectorAll("*");
-        console.log(`Znaleziono ${elements.length} elementów do analizy skalowania.`);
 
         elements.forEach(element => {
             const rect = element.getBoundingClientRect();
@@ -94,43 +86,31 @@
             if (elementBottom > maxBottom) {
                 maxBottom = elementBottom;
                 lowestElement = element;
-                console.log(`Nowy najniższy element: ${element.tagName} z dolną pozycją ${elementBottom}px`);
             }
         });
 
         const bodyHeight = document.body.offsetHeight;
         const bodyWidth = document.body.offsetWidth;
 
-        console.log(`Najniższa dolna granica elementu: ${maxBottom}px`);
-        console.log(`Wysokość body: ${bodyHeight}px`);
-        console.log(`Szerokość body: ${bodyWidth}px`);
-
         if (maxBottom > bodyHeight) {
             const scale = bodyHeight / maxBottom;
-            console.log(`Skalowanie wymagane: ${scale}`);
             const baseElement = document.getElementById("base");
-
             if (baseElement) {
                 baseElement.style.transformOrigin = "center top";
                 baseElement.style.transform = `scale(${scale})`;
-
                 const newBodyWidth = bodyWidth * scale;
                 document.body.style.width = `${newBodyWidth}px`;
                 baseElement.classList.add("scale");
-
-                console.log(`Dodano skalowanie do elementu #base z wartością ${scale}`);
-                console.log(`Nowa szerokość body: ${newBodyWidth}px`);
-            } else {
-                console.warn("Nie znaleziono elementu o id 'base'.");
+                console.log(`Zastosowano skalowanie (${scale}) na elemencie #base.`);
             }
         } else {
-            console.log("Nie trzeba skalować strony, najniższy element mieści się w body.");
+            console.log("Skalowanie nie jest wymagane - cała zawartość mieści się na stronie.");
         }
     }
 
+    // Funkcja tworzy struktury HTML potrzebne do działania skryptu
     function createHTMLStructures() {
         const body = document.querySelector('body');
-        console.log('Tworzenie struktur HTML.');
 
         const checkOverlay = document.createElement('div');
         checkOverlay.id = 'checkOverlay';
@@ -178,13 +158,13 @@
 
         const backgroundOverlayStart = document.createElement('div');
         backgroundOverlayStart.id = 'background-overlay-start';
-        backgroundOverlayStart.className = 'background-overlay fade fade-visible'; 
+        backgroundOverlayStart.className = 'background-overlay fade fade-visible';
         body.appendChild(backgroundOverlayStart);
 
         const backgroundOverlayFeedback = document.createElement('div');
         backgroundOverlayFeedback.id = 'background-overlay-feedback';
         backgroundOverlayFeedback.className = 'background-overlay fade fade-hidden';
-        backgroundOverlayFeedback.style.display = 'none'; 
+        backgroundOverlayFeedback.style.display = 'none';
         body.appendChild(backgroundOverlayFeedback);
 
         const feedbackContentBox = document.createElement('div');
@@ -211,7 +191,7 @@
         feedbackAlert.textContent = 'Zadanie wykonane';
 
         const feedbackMessage = document.createElement('p');
-        feedbackMessage.textContent = 'Chętnie poznamy Twoją opinię na jego temat.';
+        feedbackMessage.textContent = 'Chętnie poznamy Twoją opinię.';
 
         feedbackRightColumn.append(feedbackIcon, feedbackAlert, feedbackMessage);
         feedbackContentBox.append(feedbackLeftColumn, feedbackRightColumn);
@@ -238,9 +218,7 @@
         iframeContainer.append(iframe, iframeArrow);
         body.appendChild(iframeContainer);
 
-        // Dodanie transition dla szerokości iframe-container
         iframeContainer.style.transition = 'transform 300ms ease-out, width 400ms ease-out';
-        console.log('Dodano transition dla szerokości iframe-container.');
 
         const topOverlay = document.createElement('div');
         topOverlay.id = 'top-overlay';
@@ -274,13 +252,10 @@
         topContentBox.append(topLeftColumn, topRightColumn);
         topOverlay.appendChild(topContentBox);
         body.appendChild(topOverlay);
-
-        console.log('Struktury HTML zostały dodane do dokumentu.');
     }
 
+    // Funkcja ustawia dodatkowe nasłuchiwacze zdarzeń, np. kliknięcia startButton, iframeArrow itp.
     function setupAdditionalEventListeners() {
-        console.log('Konfiguracja dodatkowych nasłuchiwaczy.');
-
         const startButton = document.getElementById('start-button');
         const topOverlay = document.getElementById('top-overlay');
         const iframeArrow = document.getElementById('iframe-arrow');
@@ -290,12 +265,10 @@
         const backgroundOverlayFeedback = document.getElementById('background-overlay-feedback');
 
         if (!startButton || !topOverlay || !iframeArrow || !iframeArrowImg || !iframeContainer || !backgroundOverlayStart || !backgroundOverlayFeedback) {
-            console.warn('Niektóre elementy wymagane do nasłuchiwaczy nie zostały znalezione.');
             return;
         }
 
         function triggerShake() {
-            console.log('Wywołanie animacji shake na startButton.');
             startButton.classList.add('shake');
             setTimeout(() => {
                 startButton.classList.remove('shake');
@@ -303,52 +276,41 @@
         }
 
         function hideIframeArrow() {
-            console.log('Ukrywanie iframe-arrow z animacją fade.');
             iframeArrow.classList.add('hidden-fade');
         }
 
         function showIframeArrow() {
-            console.log('Pokazywanie iframe-arrow z animacją fade.');
             iframeArrow.classList.remove('hidden-fade');
         }
 
         startButton.addEventListener('click', () => {
-            console.log('Kliknięto startButton.');
+            console.log('Rozpoczęto zadanie (kliknięcie startButton).');
             topOverlay.style.display = 'none';
-            backgroundOverlayStart.style.display = 'none'; 
-
+            backgroundOverlayStart.style.display = 'none';
             if (targetIframe && targetIframe.contentWindow && iframeOrigin) {
                 const message = { typ: 'startButtonClicked', dane: 'start-button' };
                 targetIframe.contentWindow.postMessage(message, iframeOrigin);
-                console.log('Wysłano wiadomość do iframe:', message);
-            } else {
-                console.warn('Nie znaleziono docelowego iframe lub brak origin.');
             }
         });
 
         iframeArrow.addEventListener('click', () => {
-            console.log('Kliknięto iframe-arrow.');
             const isVisible = iframeContainer.getAttribute('data-visible') === 'true';
-            console.log(`Aktualna widoczność iframeContainer: ${isVisible}`);
             if (isVisible) {
                 iframeContainer.classList.add('hidden');
                 iframeArrowImg.classList.add('rotated');
                 iframeContainer.setAttribute('data-visible', 'false');
-                console.log('Iframe container został ukryty.');
+                console.log('Ukryto panel z ramką.');
             } else {
                 iframeContainer.classList.remove('hidden');
                 iframeArrowImg.classList.remove('rotated');
                 iframeContainer.setAttribute('data-visible', 'true');
-                console.log('Iframe container został pokazany.');
+                console.log('Pokazano panel z ramką.');
             }
         });
 
         topOverlay.addEventListener('click', (event) => {
             if (!event.target.closest('#start-button')) {
-                console.log('Kliknięto poza start-button.');
                 triggerShake();
-            } else {
-                console.log('Kliknięto start-button w top-overlay.');
             }
         });
 
@@ -358,11 +320,9 @@
                 backgroundOverlayFeedback.classList.remove('fade-hidden');
                 backgroundOverlayFeedback.classList.add('fade-visible');
                 hideIframeArrow();
-                
                 const isIframeVisible = iframeContainer.getAttribute('data-visible') === 'true';
                 if (!isIframeVisible) {
                     setTimeout(() => {
-                        console.log('Wywołano kliknięcie na iframe-arrow w ramach logiki showFeedbackOverlay.');
                         iframeArrow.click();
                     }, 200);
                 }
@@ -385,146 +345,100 @@
         window.hideFeedbackOverlay = hideFeedbackOverlay;
     }
 
+    // Funkcja pobiera wartość parametru z URL
     function getURLParameter(name) {
-        console.log(`Pobieranie parametru URL: ${name}`);
         name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
         const regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
         const results = regex.exec(location.search);
-        const param = results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
-        console.log(`Znaleziony parametr ${name}: ${param}`);
-        return param;
+        return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
     }
 
+    // Funkcja ustawia src dla iframe bazując na parametrach URL
     function manipulateIframes() {
-        console.log('Rozpoczynam manipulację iframe.');
-
         const id = getURLParameter('id');
         const survey = getURLParameter('survey');
 
-        if (id) {
-            console.log('Znaleziono parametr id:', id);
-        } else {
-            console.log('Nie znaleziono parametru id.');
-        }
-
         if (!survey) {
-            console.log('Nie znaleziono parametru survey.');
+            console.log('Brak parametru survey - pomijam ładowanie ankiety.');
             return;
         }
 
         const iframe = document.getElementById('survey-iframe');
         if (iframe) {
-            console.log('Znaleziono ramkę z id="survey-iframe":', iframe);
             const newSrc = survey + (survey.includes('?') ? '&' : '?') + 'user_id=' + encodeURIComponent(id);
             iframe.setAttribute('src', newSrc);
-            console.log('Zaktualizowano źródło ramki do:', newSrc);
-
-            targetIframe = iframe;
             try {
                 const surveyURL = new URL(newSrc);
                 iframeOrigin = surveyURL.origin;
-                console.log('Zdefiniowano origin iframe jako:', iframeOrigin);
             } catch (error) {
-                console.error('Błąd podczas parsowania URL survey:', error);
+                console.error('Błąd przy parsowaniu URL ankiety:', error);
             }
-        } else {
-            console.log('Nie znaleziono iframe z id="survey-iframe".');
+            targetIframe = iframe;
+            console.log('Załadowano ankietę do iframe.');
         }
     }
 
+    // Funkcja nasłuchuje kliknięcia w dokument i reaguje na elementy "task-completed"
     function setupClickListener() {
-        console.log('Nasłuchiwanie na kliknięcia...');
-        document.addEventListener(
-            'click',
-            function(event) {
-                console.log('Wykryto kliknięcie:', event.target);
-                var taskElement = event.target.closest('[data-label="task-completed"]');
+        document.addEventListener('click', function(event) {
+            const taskElement = event.target.closest('[data-label="task-completed"]');
+            if (taskElement) {
+                console.log('Wykonano zadanie oznaczone jako "task-completed".');
+                const checkOverlay = document.getElementById("checkOverlay");
+                const floatingWrapper = document.getElementById("floatingWrapper");
+                const loaderBox = document.getElementById("loaderBox");
+                const iframeContainer = document.getElementById('iframe-container');
 
-                if (taskElement) {
-                    console.log('Kliknięto element z data-label="task-completed":', taskElement);
+                if (checkOverlay && floatingWrapper && loaderBox && iframeContainer) {
+                    checkOverlay.style.display = "flex";
+                    positionWrapper(event.clientX, event.clientY);
+                    floatingWrapper.classList.remove("floating-wrapper-hide");
+                    floatingWrapper.style.display = "flex";
+                    floatingWrapper.classList.add("floating-wrapper-show");
 
-                    const checkOverlay = document.getElementById("checkOverlay");
-                    const floatingWrapper = document.getElementById("floatingWrapper");
-                    const loaderBox = document.getElementById("loaderBox");
-                    const iframeContainer = document.getElementById('iframe-container');
+                    const isIframeVisible = iframeContainer.getAttribute('data-visible') === 'true';
 
-                    if (checkOverlay && floatingWrapper && loaderBox && iframeContainer) {
-                        checkOverlay.style.display = "flex";
-
-                        positionWrapper(event.clientX, event.clientY);
-
-                        floatingWrapper.classList.remove("floating-wrapper-hide");
-                        floatingWrapper.style.display = "flex";
-                        floatingWrapper.classList.add("floating-wrapper-show");
-
-                        const isIframeVisible = iframeContainer.getAttribute('data-visible') === 'true';
-
-                        if (isIframeVisible) {
-                            loaderBox.classList.remove("loader-box-hide");
-                            loaderBox.classList.add("loader-box-show");
-                        } else {
-                            loaderBox.classList.remove("loader-box-show");
-                            loaderBox.classList.add("loader-box-hide");
-                        }
-
-                        document.addEventListener("mousemove", followCursor);
+                    if (isIframeVisible) {
+                        loaderBox.classList.remove("loader-box-hide");
+                        loaderBox.classList.add("loader-box-show");
                     } else {
-                        console.warn("Brak elementów do wyświetlenia (checkOverlay, floatingWrapper, loaderBox, iframeContainer).");
+                        loaderBox.classList.remove("loader-box-show");
+                        loaderBox.classList.add("loader-box-hide");
                     }
 
-                    setTimeout(() => {
-                        if (targetIframe && targetIframe.contentWindow && iframeOrigin) {
-                            targetIframe.contentWindow.postMessage(
-                                { typ: 'klikniecie', dane: 'task-completed' },
-                                iframeOrigin
-                            );
-                            console.log('Wysłano wiadomość do iframe (po 1s):', { typ: 'klikniecie', dane: 'task-completed' });
-                        } else {
-                            console.log('Nie znaleziono docelowego iframe lub brak origin.');
-                        }
-                    }, 1000);
-                } else {
-                    console.log('Kliknięto element inny niż task-completed:', event.target);
+                    document.addEventListener("mousemove", followCursor);
                 }
-            },
-            { passive: false }
-        );
 
-        console.log('Nasłuchiwacz na kliknięcia został dodany.');
+                setTimeout(() => {
+                    if (targetIframe && targetIframe.contentWindow && iframeOrigin) {
+                        targetIframe.contentWindow.postMessage({ typ: 'klikniecie', dane: 'task-completed' }, iframeOrigin);
+                    }
+                }, 1000);
+            }
+        }, { passive: false });
     }
 
+    // Funkcja nasłuchuje wiadomości przychodzące z iframe i reaguje na nie
     function setupMessageListener() {
-        console.log('Dodawanie nasłuchiwacza wiadomości od iframe.');
         const backgroundOverlayFeedback = document.getElementById('background-overlay-feedback');
         const checkOverlay = document.getElementById("checkOverlay");
         const floatingWrapper = document.getElementById("floatingWrapper");
         const loaderBox = document.getElementById("loaderBox");
 
         window.addEventListener('message', function(event) {
-            console.log('Otrzymano wiadomość:', event.data);
-            console.log('event.origin:', event.origin);
-            console.log('Oczekiwany iframeOrigin:', iframeOrigin);
-
             if (event.origin !== iframeOrigin) {
-                console.info('Nieautoryzowany nadawca:', event.origin);
                 return;
             }
 
-            console.log('Wiadomość pochodzi z zaufanego origin.');
-
             if (event.data.typ === 'nextButton') {
-                console.log('Otrzymano wiadomość typu "nextButton"');
                 if (backgroundOverlayFeedback && backgroundOverlayFeedback.classList.contains('fade-visible')) {
                     window.hideFeedbackOverlay();
                 }
             } else if (event.data.typ === 'showFeedbackOverlay') {
-                console.log('Otrzymano wiadomość typu "showFeedbackOverlay"');
-                
                 setTimeout(() => {
                     if (checkOverlay && floatingWrapper && loaderBox) {
                         floatingWrapper.classList.remove("floating-wrapper-show");
                         floatingWrapper.classList.add("floating-wrapper-hide");
-
                         loaderBox.classList.remove("loader-box-show");
                         loaderBox.classList.add("loader-box-hide");
 
@@ -532,89 +446,52 @@
                             floatingWrapper.style.display = "none";
                             floatingWrapper.classList.remove("floating-wrapper-hide");
                             checkOverlay.style.display = "none";
-
                             document.removeEventListener("mousemove", followCursor);
-
                             window.showFeedbackOverlay();
                         }, 200);
-                    } else {
-                        console.warn("Brak niezbędnych elementów do ukrycia (checkOverlay, floatingWrapper, loaderBox).");
                     }
                 }, 2000);
             } else if (event.data.typ === 'pageLoaded') {
-                console.log('Otrzymano wiadomość typu "pageLoaded"');
-
                 setTimeout(() => {
                     const initialLoader = document.getElementById('initial-loader');
                     if (initialLoader) {
-                        console.log('Znaleziono element #initial-loader. Rozpoczynanie animacji ukrywania.');
                         initialLoader.style.opacity = '0';
-                        console.log('Ustawiono opacity na 0 dla #initial-loader.');
                         setTimeout(() => {
                             initialLoader.style.display = 'none';
-                            console.log('Ustawiono display na "none" dla #initial-loader.');
                         }, 200);
-                    } else {
-                        console.warn('Nie znaleziono elementu o id "initial-loader".');
                     }
                 }, 1000);
             } else if (event.data.typ === 'flowFinished') {
-                console.log('Otrzymano wiadomość typu "flowFinished"');
                 const iframeContainers = document.querySelectorAll('.iframe-container');
                 iframeContainers.forEach(container => {
                     container.style.width = '100%';
-                    console.log('Zmieniono szerokość .iframe-container na 100% z animacją.');
                 });
-            } 
-            // Dodanie nowego nasłuchiwacza dla 'taskProblem'
-            else if (event.data.typ === 'taskProblem') {
-                console.log('Otrzymano wiadomość typu "taskProblem"');
+            } else if (event.data.typ === 'taskProblem') {
                 const iframeContainers = document.querySelectorAll('.iframe-container');
                 iframeContainers.forEach(container => {
-                    // Definiujemy funkcję obsługującą zakończenie animacji
                     function handleTransitionEnd(e) {
-                        if (e.propertyName === 'width') { // Upewniamy się, że to zmiana szerokości
-                            console.log('Animacja zmiany szerokości zakończona dla', container);
-                            
-                            // Wysyłamy wiadomość 'hideLoader' do iframe
+                        if (e.propertyName === 'width') {
                             if (targetIframe && targetIframe.contentWindow && iframeOrigin) {
                                 const message = { typ: 'hideLoader' };
                                 targetIframe.contentWindow.postMessage(message, iframeOrigin);
-                                console.log('Wysłano wiadomość do iframe:', message);
-                            } else {
-                                console.warn('Nie znaleziono docelowego iframe lub brak origin.');
                             }
-
-                            // Usuwamy nasłuchiwacz, aby nie reagować na kolejne zdarzenia
                             container.removeEventListener('transitionend', handleTransitionEnd);
                         }
                     }
-
-                    // Dodajemy nasłuchiwacz zdarzenia 'transitionend' z opcją 'once: true'
                     container.addEventListener('transitionend', handleTransitionEnd, { once: true });
-
-                    // Ustawiamy szerokość na 100%, co wywoła animację
                     container.style.width = '100%';
-                    console.log('Zmieniono szerokość .iframe-container na 100% z powodu taskProblem.');
                 });
             }
-            else {
-                console.log('Otrzymano wiadomość innego typu:', event.data.typ);
-            }
         });
-
-        console.log('Nasłuchiwacz wiadomości od iframe został dodany.');
     }
 
+    // Funkcja inicjalizująca skrypt
     function initializeScript() {
-        console.log('Inicjalizacja skryptu.');
         createHTMLStructures();
-
         const checkOverlay = document.getElementById('checkOverlay');
         if (checkOverlay) {
             checkOverlay.style.display = "none";
         }
-
         scaleBaseElement();
         setupAdditionalEventListeners();
         manipulateIframes();
