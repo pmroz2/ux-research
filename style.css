@@ -7,15 +7,6 @@
     box-sizing: border-box;
 }
 
-*,
-*::before,
-*::after,
-*:focus,
-*:focus-within {
-  box-shadow: none !important;
-  outline: none !important;
-}
-
 
 html, body {
     height: 100%;
