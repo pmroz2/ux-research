@@ -482,9 +482,9 @@ h2::before {
 }
 
 #start-button {
-    background: linear-gradient(to top, rgba(217, 253, 185, 1), rgba(243, 255, 231, 1));
+ /*   background: linear-gradient(to top, rgba(217, 253, 185, 1), rgba(243, 255, 231, 1)); */
     border-radius: 100px;
-    color: #144241;
+ /*   color: #144241; */
     cursor: pointer;
     display: inline-block;
     font-family: "Lexend", sans-serif;
@@ -500,6 +500,14 @@ h2::before {
     letter-spacing: 0.5px;
     height: 40px;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+
+position: relative;
+left: -585px;
+top: 90px;
+width: 150px;
+background-color: #19C394;
+color: white;
+
 }
 
 #start-button:hover {
