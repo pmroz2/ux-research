@@ -499,7 +499,7 @@ h2::before {
     touch-action: manipulation;
     letter-spacing: 0.5px;
     height: 40px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+ /*   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); */
 
 position: relative;
 left: -585px;
@@ -513,5 +513,5 @@ color: white;
 #start-button:hover {
 /*    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
     transform: scale(1.05); */
-    backgroud-color: #7ccdac;
+    background-color: #7ccdac;
 }
