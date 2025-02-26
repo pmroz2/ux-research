@@ -561,7 +561,7 @@ color: white;
 
 #legal-modal {
     background-color: #ffffff;
-    border-radius: 4px;
+    border-radius: 8px;
     display: flex;
     flex-direction: column;
     align-items: stretch;
@@ -573,7 +573,7 @@ color: white;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 70px;
+    height: 80px;
     padding: 10px 25px 10px 50px;
 }
 
@@ -582,7 +582,7 @@ color: white;
 }
 
 #legal-modal-content {
-    padding: 50px;
+    padding: 30px 50px 40px 50px;
 }
 
 #legal-modal-content-rodo, #legal-modal-content-other {
@@ -601,4 +601,12 @@ color: white;
 #legal-modal-close-button {
     width: 50px;
     height: 50px;
+    border-radius: 6px;
+}
+
+#legal-modal-close-button:hover {
+    width: 50px;
+    height: 50px;
+    border-radius: 6px;
+    background-color: #f2f2f2;
 }
