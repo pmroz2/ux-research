@@ -248,7 +248,20 @@
         startButton.id = 'start-button';
         startButton.textContent = 'Rozpocznij';
 
-        topRightColumn.append(headerText, paragraph, startButton);
+        // Dodanie nowego elementu "legal-information" pod przyciskiem startButton
+        const legalInformation = document.createElement('div');
+        legalInformation.id = 'legal-information';
+
+        const legalRodo = document.createElement('p');
+        legalRodo.innerHTML = 'Obowiązek informacyjny RODO - <span id="legal-rodo">więcej</span>';
+
+        const legalOther = document.createElement('p');
+        legalOther.innerHTML = 'Informacje prawne - <span id="legal-other">więcej</span>';
+
+        legalInformation.appendChild(legalRodo);
+        legalInformation.appendChild(legalOther);
+
+        topRightColumn.append(headerText, paragraph, startButton, legalInformation);
         topContentBox.append(topLeftColumn, topRightColumn);
         topOverlay.appendChild(topContentBox);
         body.appendChild(topOverlay);
@@ -309,7 +322,10 @@
         });
 
         topOverlay.addEventListener('click', (event) => {
-            if (!event.target.closest('#start-button')) {
+            // Kliknięcia w spanach legal-rodo i legal-other nie wywołują efektu shake
+            if (!event.target.closest('#start-button') &&
+                !event.target.closest('#legal-rodo') &&
+                !event.target.closest('#legal-other')) {
                 triggerShake();
             }
         });
