@@ -582,7 +582,13 @@ color: white;
 }
 
 #legal-modal-content-rodo, #legal-modal-content-other {
-    font-size: 12px;
+    font-size: 13px;
     line-height: 200%;
     color: #4f4f4f;
 }
+
+#legal-modal-content-rodo li {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
