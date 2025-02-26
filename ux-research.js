@@ -15,14 +15,21 @@
         const legalModal = document.createElement('div');
         legalModal.id = "legal-modal";
 
-        // Nagłówek modala
+        // Nagłówek modala – dodajemy dwa nagłówki h1
         const legalModalHeader = document.createElement('div');
         legalModalHeader.id = "legal-modal-header";
 
-        const headerH1 = document.createElement('h1');
-        headerH1.textContent = "Legal Information";
-        legalModalHeader.appendChild(headerH1);
+        const rodoHeading = document.createElement('h1');
+        rodoHeading.id = "legal-modal-rodo-heading";
+        rodoHeading.textContent = "Obowiązek informacyjny RODO";
+        legalModalHeader.appendChild(rodoHeading);
 
+        const otherHeading = document.createElement('h1');
+        otherHeading.id = "legal-modal-other-heading";
+        otherHeading.textContent = "Informacje prawne";
+        legalModalHeader.appendChild(otherHeading);
+
+        // Przycisk zamknięcia modala
         const legalModalCloseButton = document.createElement('div');
         legalModalCloseButton.id = "legal-modal-close-button";
         const closeImg = document.createElement('img');
@@ -80,6 +87,54 @@
 
         // Wstawienie na samej górze body
         document.body.insertBefore(legalModalWrapper, document.body.firstChild);
+    }
+
+    // Nowa funkcja dodająca logikę obsługi modala
+    function setupLegalModalListeners() {
+        // Elementy wywołujące otwarcie modala
+        const legalRodoSpan = document.getElementById('legal-rodo');
+        const legalOtherSpan = document.getElementById('legal-other');
+        // Elementy modala
+        const modalWrapper = document.getElementById('legal-modal-wrapper');
+        const rodoHeading = document.getElementById('legal-modal-rodo-heading');
+        const otherHeading = document.getElementById('legal-modal-other-heading');
+        const contentRodo = document.getElementById('legal-modal-content-rodo');
+        const contentOther = document.getElementById('legal-modal-content-other');
+        const modalCloseButton = document.getElementById('legal-modal-close-button');
+
+        if (legalRodoSpan) {
+            legalRodoSpan.addEventListener('click', function(event) {
+                // Zmiana widoczności elementów
+                rodoHeading.style.display = "block";
+                otherHeading.style.display = "none";
+                contentRodo.style.display = "block";
+                contentOther.style.display = "none";
+                modalWrapper.style.display = "flex";
+                event.stopPropagation();
+            });
+        }
+
+        if (legalOtherSpan) {
+            legalOtherSpan.addEventListener('click', function(event) {
+                otherHeading.style.display = "block";
+                rodoHeading.style.display = "none";
+                contentOther.style.display = "block";
+                contentRodo.style.display = "none";
+                modalWrapper.style.display = "flex";
+                event.stopPropagation();
+            });
+        }
+
+        // Kliknięcie w cały wrapper zamyka modal
+        modalWrapper.addEventListener('click', function() {
+            modalWrapper.style.display = "none";
+        });
+
+        // Kliknięcie przycisku zamknięcia zamyka modal
+        modalCloseButton.addEventListener('click', function(event) {
+            modalWrapper.style.display = "none";
+            event.stopPropagation();
+        });
     }
 
     // Funkcja ustawia pozycję "floatingWrapper" względem kursora
@@ -582,6 +637,8 @@
     function initializeScript() {
         // Dodajemy modal z informacjami prawnymi na samej górze HTML-a
         createLegalModal();
+        // Dodajemy nasłuchiwanie dla modala
+        setupLegalModalListeners();
         createHTMLStructures();
         const checkOverlay = document.getElementById('checkOverlay');
         if (checkOverlay) {
