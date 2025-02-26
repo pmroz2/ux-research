@@ -538,6 +538,7 @@ color: white;
 #legal-information span {
     text-decoration: underline;
     color: inherit;
+    cursor: pointer;
 }
 
 #legal-information span:hover {
