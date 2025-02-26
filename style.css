@@ -580,7 +580,7 @@ color: white;
 
 #legal-modal-header h1 {
     font-size: 20px;
-    background: linear-gradient(to top, #D9FDB9 40%, transparent 60%);
+    background: linear-gradient(to top, #D9FDB9 30%, transparent 70%);
 }
 
 #legal-modal-content {
