@@ -565,7 +565,7 @@ color: white;
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    max-width: 700px;
+    max-width: 900px;
     width: 100%;
 }
 
@@ -573,8 +573,12 @@ color: white;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 50px;
-    padding: 10px 25px 10px 25px;
+    height: 70px;
+    padding: 10px 25px 10px 50px;
+}
+
+#legal-modal-header h1 {
+    font-size: 20px;
 }
 
 #legal-modal-content {
@@ -591,5 +595,10 @@ color: white;
 #legal-modal-content-rodo li {
     margin-top: 10px;
     margin-bottom: 10px;
+    margin-left: 15px;
 }
 
+#legal-modal-close-button {
+    width: 50px;
+    height: 50px;
+}
