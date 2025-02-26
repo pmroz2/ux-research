@@ -605,6 +605,7 @@ color: white;
     height: 45px;
     border-radius: 6px;
     cursor: pointer;
+    transition: background-color 250ms ease-in-out;
 }
 
 #legal-modal-close-button:hover {
