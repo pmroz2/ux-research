@@ -523,8 +523,8 @@ color: white;
     width: 450px;
     max-width: 450px;
     min-width: 450px;
-    background-color: red;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
 }
@@ -534,3 +534,11 @@ color: white;
     color: #4f4f4f;
 }
 
+#legal-information span {
+    text-decoration: underline;
+    color: inherit;
+}
+
+#legal-information span:hover {
+    color: #000000;
+}
