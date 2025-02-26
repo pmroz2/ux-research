@@ -515,3 +515,22 @@ color: white;
     transform: scale(1.05); */
     background-color: #1bac83;
 }
+
+#legal-information {
+    position: absolute;
+    top: 450px;
+    left: 0px;
+    width: 450px;
+    max-width: 450px;
+    min-width: 450px;
+    background-color: red;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#legal-information p {
+    font-size: 11px;
+    color: #4f4f4f;
+}
+
