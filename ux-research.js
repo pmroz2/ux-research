@@ -7,11 +7,15 @@
 
     // Funkcja dodająca modal z informacjami prawnymi na samej górze HTML-a
     function createLegalModal() {
-        // Wrapper modala
+        // Wrapper modala – tło modala
         const legalModalWrapper = document.createElement('div');
         legalModalWrapper.id = "legal-modal-wrapper";
-
-        // Główny kontener modala
+        // Ustawienie początkowych właściwości do animacji
+        legalModalWrapper.style.display = "none";
+        legalModalWrapper.style.opacity = "0";
+        legalModalWrapper.style.transition = "opacity 300ms ease";
+        
+        // Główny kontener modala (treść)
         const legalModal = document.createElement('div');
         legalModal.id = "legal-modal";
 
@@ -91,16 +95,37 @@
 
     // Nowa funkcja dodająca logikę obsługi modala
     function setupLegalModalListeners() {
-        // Elementy wywołujące otwarcie modala
+        // Elementy wywołujące otwarcie modala (span'y utworzone w createHTMLStructures)
         const legalRodoSpan = document.getElementById('legal-rodo');
         const legalOtherSpan = document.getElementById('legal-other');
         // Elementy modala
         const modalWrapper = document.getElementById('legal-modal-wrapper');
+        const modal = document.getElementById('legal-modal');
         const rodoHeading = document.getElementById('legal-modal-rodo-heading');
         const otherHeading = document.getElementById('legal-modal-other-heading');
         const contentRodo = document.getElementById('legal-modal-content-rodo');
         const contentOther = document.getElementById('legal-modal-content-other');
         const modalCloseButton = document.getElementById('legal-modal-close-button');
+
+        // Funkcja do otwierania modala z fade in
+        function showModal() {
+            modalWrapper.style.display = "flex";
+            // Początkowo ustawiamy opacity na 0
+            modalWrapper.style.opacity = "0";
+            // W kolejnym cyklu animujemy opacity do 1
+            requestAnimationFrame(() => {
+                modalWrapper.style.opacity = "1";
+            });
+        }
+
+        // Funkcja do zamykania modala z fade out
+        function closeModal() {
+            modalWrapper.style.opacity = "0";
+            // Po zakończeniu animacji (300ms) ukrywamy modal
+            setTimeout(() => {
+                modalWrapper.style.display = "none";
+            }, 300);
+        }
 
         if (legalRodoSpan) {
             legalRodoSpan.addEventListener('click', function(event) {
@@ -108,7 +133,7 @@
                 otherHeading.style.display = "none";
                 contentRodo.style.display = "block";
                 contentOther.style.display = "none";
-                modalWrapper.style.display = "flex";
+                showModal();
                 event.stopPropagation();
             });
         }
@@ -119,19 +144,21 @@
                 rodoHeading.style.display = "none";
                 contentOther.style.display = "block";
                 contentRodo.style.display = "none";
-                modalWrapper.style.display = "flex";
+                showModal();
                 event.stopPropagation();
             });
         }
 
-        // Kliknięcie w cały wrapper zamyka modal
-        modalWrapper.addEventListener('click', function() {
-            modalWrapper.style.display = "none";
+        // Kliknięcie w tło modala – tylko poza głównym kontenerem (legal-modal)
+        modalWrapper.addEventListener('click', function(event) {
+            if (!event.target.closest('#legal-modal')) {
+                closeModal();
+            }
         });
 
-        // Kliknięcie przycisku zamknięcia zamyka modal
+        // Kliknięcie przycisku zamknięcia modala
         modalCloseButton.addEventListener('click', function(event) {
-            modalWrapper.style.display = "none";
+            closeModal();
             event.stopPropagation();
         });
     }
