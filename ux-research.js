@@ -104,7 +104,6 @@
 
         if (legalRodoSpan) {
             legalRodoSpan.addEventListener('click', function(event) {
-                // Zmiana widoczności elementów
                 rodoHeading.style.display = "block";
                 otherHeading.style.display = "none";
                 contentRodo.style.display = "block";
@@ -635,11 +634,11 @@
 
     // Funkcja inicjalizująca skrypt
     function initializeScript() {
-        // Dodajemy modal z informacjami prawnymi na samej górze HTML-a
+        // Najpierw tworzymy modal i wszystkie struktury HTML
         createLegalModal();
-        // Dodajemy nasłuchiwanie dla modala
-        setupLegalModalListeners();
         createHTMLStructures();
+        // Następnie dodajemy logikę obsługi modala
+        setupLegalModalListeners();
         const checkOverlay = document.getElementById('checkOverlay');
         if (checkOverlay) {
             checkOverlay.style.display = "none";
