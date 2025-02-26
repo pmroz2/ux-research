@@ -518,7 +518,7 @@ color: white;
 
 #legal-information {
     position: absolute;
-    top: 450px;
+    top: 490px;
     left: 0px;
     width: 450px;
     max-width: 450px;
@@ -532,6 +532,7 @@ color: white;
 #legal-information p {
     font-size: 11px;
     color: #4f4f4f;
+    margin: 5px;
 }
 
 #legal-information span {
