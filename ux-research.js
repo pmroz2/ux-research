@@ -5,6 +5,83 @@
     let targetIframe = null;
     let iframeOrigin = null;
 
+    // Funkcja dodająca modal z informacjami prawnymi na samej górze HTML-a
+    function createLegalModal() {
+        // Wrapper modala
+        const legalModalWrapper = document.createElement('div');
+        legalModalWrapper.id = "legal-modal-wrapper";
+
+        // Główny kontener modala
+        const legalModal = document.createElement('div');
+        legalModal.id = "legal-modal";
+
+        // Nagłówek modala
+        const legalModalHeader = document.createElement('div');
+        legalModalHeader.id = "legal-modal-header";
+
+        const headerH1 = document.createElement('h1');
+        headerH1.textContent = "Legal Information";
+        legalModalHeader.appendChild(headerH1);
+
+        const legalModalCloseButton = document.createElement('div');
+        legalModalCloseButton.id = "legal-modal-close-button";
+        const closeImg = document.createElement('img');
+        closeImg.src = 'https://1236554drs4231112876vccf4-pawel.s3.eu-north-1.amazonaws.com/ux-research_close-icon.svg';
+        closeImg.alt = 'Close';
+        legalModalCloseButton.appendChild(closeImg);
+        legalModalHeader.appendChild(legalModalCloseButton);
+
+        // Treść modala
+        const legalModalContent = document.createElement('div');
+        legalModalContent.id = "legal-modal-content";
+
+        // Sekcja RODO
+        const legalModalContentRodo = document.createElement('div');
+        legalModalContentRodo.id = "legal-modal-content-rodo";
+
+        const rodoList = document.createElement('ul');
+
+        const li1 = document.createElement('li');
+        li1.textContent = "Prezentowane treści mają charakter testowy, co oznacza, że wyniki z wykonywanych przez Ciebie zadań – testów służą nam w celu poprawy określonych funkcjonalności, obszarów lub usług w ramach Platformy.";
+        rodoList.appendChild(li1);
+
+        const li2 = document.createElement('li');
+        li2.textContent = "Wykonywanie testów na udostępnionym prototypie nie wiąże się dla Ciebie z wystąpieniem skutków cywilnoprawnych względem innych użytkowników Platformy.";
+        rodoList.appendChild(li2);
+
+        const li3 = document.createElement('li');
+        li3.textContent = "Wykonywanie testów nie wiąże się ze świadczeniem usług na naszą rzecz, w związku z czym ma ono charakter bezpłatny. Zastrzegamy sobie możliwość kierowania określonych funkcjonalności lub usług do testów przez wybranych użytkowników Platformy.";
+        rodoList.appendChild(li3);
+
+        const li4 = document.createElement('li');
+        li4.textContent = "Udostępniane prototypy i treści mają charakter poufny, a wszelkie autorskie prawa majątkowe do prezentowanych treści przysługują Trans.eu Group S.A. Zabronione jest ich wykorzystywanie, upublicznianie, rozpowszechnianie, kopiowanie.";
+        rodoList.appendChild(li4);
+
+        const li5 = document.createElement('li');
+        li5.textContent = "Nie ponosimy odpowiedzialności za jakiekolwiek błędy komputerowe, programowe, internetowe, telefoniczne, techniczne, sprzętowe, w tym w szczególności zakłócenia na łączach telekomunikacyjnych, błędy transmisji danych, zakłócenia systemów, inne nieprawidłowości, które mogą wystąpić w trakcie testów.";
+        rodoList.appendChild(li5);
+
+        legalModalContentRodo.appendChild(rodoList);
+
+        // Sekcja informacje prawne
+        const legalModalContentOther = document.createElement('div');
+        legalModalContentOther.id = "legal-modal-content-other";
+
+        const otherParagraph = document.createElement('p');
+        otherParagraph.innerHTML = 'Administratorem danych osobowych jest Trans.eu Group S.A., ul. Racławicka 2-4, 53-146 Wrocław (dalej jako: "Administrator"). Dane wskazane w ramach formularza makiet testowych będą przetwarzane w celach niezbędnych dla udziału i realizacji w badań testowych. Podanie danych jest dobrowolne, ale niezbędne dla udziału w testach użyteczności przeprowadzanych przez Trans.eu. Podstawa prawna, cel, okres przetwarzania danych osobowych oraz uprawnienia przysługujące, a także inne ważne informacje dotyczące zasad przetwarzania danych osobowych są szczegółowo określone w <a href="https://www.trans.eu/pl/polityka-prywatnosci">Polityce prywatności</a>, kontakt: <a href="mailto:iod@trans.eu">iod@trans.eu</a>.';
+        legalModalContentOther.appendChild(otherParagraph);
+
+        legalModalContent.appendChild(legalModalContentRodo);
+        legalModalContent.appendChild(legalModalContentOther);
+
+        legalModal.appendChild(legalModalHeader);
+        legalModal.appendChild(legalModalContent);
+        legalModalWrapper.appendChild(legalModal);
+
+        // Wstawienie na samej górze body
+        document.body.insertBefore(legalModalWrapper, document.body.firstChild);
+    }
+
     // Funkcja ustawia pozycję "floatingWrapper" względem kursora
     function positionWrapper(x, y) {
         const offset = 60;
@@ -503,6 +580,8 @@
 
     // Funkcja inicjalizująca skrypt
     function initializeScript() {
+        // Dodajemy modal z informacjami prawnymi na samej górze HTML-a
+        createLegalModal();
         createHTMLStructures();
         const checkOverlay = document.getElementById('checkOverlay');
         if (checkOverlay) {
