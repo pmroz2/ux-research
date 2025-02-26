@@ -580,7 +580,7 @@ color: white;
 
 #legal-modal-header h1 {
     font-size: 20px;
-    background: linear-gradient(to top, #D9FDB9 60%, transparent 40%);
+    background: linear-gradient(to top, #D9FDB9 40%, transparent 60%);
 }
 
 #legal-modal-content {
@@ -604,6 +604,7 @@ color: white;
     width: 45px;
     height: 45px;
     border-radius: 6px;
+    cursor: pointer;
 }
 
 #legal-modal-close-button:hover {
