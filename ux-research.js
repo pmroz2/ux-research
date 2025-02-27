@@ -46,9 +46,17 @@
         const legalModalContent = document.createElement('div');
         legalModalContent.id = "legal-modal-content";
 
-        // Sekcja RODO
+        // Sekcja RODO – teraz tutaj umieszczamy tekst
         const legalModalContentRodo = document.createElement('div');
         legalModalContentRodo.id = "legal-modal-content-rodo";
+
+        const otherParagraph = document.createElement('p');
+        otherParagraph.innerHTML = 'Administratorem danych osobowych jest Trans.eu Group S.A., ul. Racławicka 2-4, 53-146 Wrocław (dalej jako: "Administrator"). Dane wskazane w ramach formularza makiet testowych będą przetwarzane w celach niezbędnych dla udziału i realizacji badań testowych. Podanie danych jest dobrowolne, ale niezbędne dla udziału w testach użyteczności przeprowadzanych przez Trans.eu. Podstawa prawna, cel, okres przetwarzania danych osobowych oraz uprawnienia przysługujące, a także inne ważne informacje dotyczące zasad przetwarzania danych osobowych są szczegółowo określone w <a href="https://www.trans.eu/pl/polityka-prywatnosci" target="_blank">Polityce prywatnosci</a>, kontakt: <a href="mailto:iod@trans.eu">iod@trans.eu</a>.';
+        legalModalContentRodo.appendChild(otherParagraph);
+
+        // Sekcja informacje prawne – tutaj umieszczamy listę
+        const legalModalContentOther = document.createElement('div');
+        legalModalContentOther.id = "legal-modal-content-other";
 
         const rodoList = document.createElement('ul');
 
@@ -72,15 +80,7 @@
         li5.textContent = "Nie ponosimy odpowiedzialności za jakiekolwiek błędy komputerowe, programowe, internetowe, telefoniczne, techniczne, sprzętowe, w tym w szczególności zakłócenia na łączach telekomunikacyjnych, błędy transmisji danych, zakłócenia systemów, inne nieprawidłowości, które mogą wystąpić w trakcie testów.";
         rodoList.appendChild(li5);
 
-        legalModalContentRodo.appendChild(rodoList);
-
-        // Sekcja informacje prawne
-        const legalModalContentOther = document.createElement('div');
-        legalModalContentOther.id = "legal-modal-content-other";
-
-        const otherParagraph = document.createElement('p');
-        otherParagraph.innerHTML = 'Administratorem danych osobowych jest Trans.eu Group S.A., ul. Racławicka 2-4, 53-146 Wrocław (dalej jako: "Administrator"). Dane wskazane w ramach formularza makiet testowych będą przetwarzane w celach niezbędnych dla udziału i realizacji badań testowych. Podanie danych jest dobrowolne, ale niezbędne dla udziału w testach użyteczności przeprowadzanych przez Trans.eu. Podstawa prawna, cel, okres przetwarzania danych osobowych oraz uprawnienia przysługujące, a także inne ważne informacje dotyczące zasad przetwarzania danych osobowych są szczegółowo określone w <a href="https://www.trans.eu/pl/polityka-prywatnosci" target="_blank">Polityce prywatnosci</a>, kontakt: <a href="mailto:iod@trans.eu">iod@trans.eu</a>.';
-        legalModalContentOther.appendChild(otherParagraph);
+        legalModalContentOther.appendChild(rodoList);
 
         legalModalContent.appendChild(legalModalContentRodo);
         legalModalContent.appendChild(legalModalContentOther);
